@@ -60,18 +60,10 @@
 		07B7108122319F2300121086 /* oko-client */ = {
 			isa = PBXGroup;
 			children = (
-				07B7108922319F4F00121086 /* macos */,
+				07B7108222319F2300121086 /* oko.c */,
 				07B7108A22319FB400121086 /* oko.h */,
 			);
 			path = "oko-client";
-			sourceTree = "<group>";
-		};
-		07B7108922319F4F00121086 /* macos */ = {
-			isa = PBXGroup;
-			children = (
-				07B7108222319F2300121086 /* oko.c */,
-			);
-			path = macos;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
