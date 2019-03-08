@@ -23,6 +23,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0778D94E223301D100AA80F3 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		07B7107F22319F2300121086 /* oko-client */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "oko-client"; sourceTree = BUILT_PRODUCTS_DIR; };
 		07B7108222319F2300121086 /* oko.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = oko.c; sourceTree = "<group>"; tabWidth = 4; usesTabs = 0; };
 		07B7108A22319FB400121086 /* oko.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = oko.h; sourceTree = "<group>"; };
@@ -42,6 +43,7 @@
 		07B7107622319F2300121086 = {
 			isa = PBXGroup;
 			children = (
+				0778D94E223301D100AA80F3 /* .gitignore */,
 				07B7108122319F2300121086 /* oko-client */,
 				07B7108022319F2300121086 /* Products */,
 			);
