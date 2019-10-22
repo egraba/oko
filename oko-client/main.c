@@ -15,11 +15,11 @@ print_machine(machine *machine)
     printf("\thostname: %s\n", machine->hostname);
     printf("\tipv4: %s\n", machine->ipv4);
     printf("\tipv6: %s\n", machine->ipv6);
-    printf("\tmac_address: %s\n", machine->macaddress);
+    printf("\tmacaddress: %s\n", machine->macaddress);
     printf("\tcpu.arch: %s\n", machine->cpu.arch);
     printf("\tcpu.model: %s\n", machine->cpu.model);
     printf("\tcpu.ncpus: %d\n", machine->cpu.ncpus);
-    printf("\tmemory.phys_mem: %ld\n", machine->memory.physmem);
+    printf("\tmemory.physmem: %ld\n", machine->memory.physmem);
     printf("\tmemory.swap: %d\n", machine->memory.swap);
     printf("\tos.name: %s\n", machine->os.name);
     printf("\tos.release %s\n", machine->os.release);
