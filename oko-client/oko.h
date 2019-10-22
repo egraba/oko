@@ -10,14 +10,14 @@ typedef struct {
     char *hostname;
     char *ipv4;
     char *ipv6;
-    char *mac_address;
+    char *macaddress;
     struct {
         char *arch;
         char *model;
         int16_t *ncpus;
     } cpu;
     struct {
-        int64_t phys_mem;
+        int64_t physmem;
         char *swap;
     } memory;
     struct {
@@ -54,7 +54,7 @@ typedef struct {
     int pckout;
 } process;
 
-int machine_info(machine *machine);
+int collect_info(machine *machine);
 /*int cpu_usage(cpu *cpu);
 int mem_usage(memory *memory);
 int swap_usage(swap *swap);
