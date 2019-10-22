@@ -6,7 +6,7 @@
 
 #include "oko.h"
 
-int
+static int
 retrieve_type(machine *machine)
 {
     int rc;
@@ -22,7 +22,7 @@ retrieve_type(machine *machine)
     return (rc);
 }
 
-int
+static int
 retrieve_model(machine *machine)
 {
     int rc;
@@ -38,7 +38,7 @@ retrieve_model(machine *machine)
     return (rc);
 }
 
-int
+static int
 retrieve_hostname(machine *machine)
 {
     int rc;
@@ -54,7 +54,7 @@ retrieve_hostname(machine *machine)
     return (rc);
 }
 
-int
+static int
 retrieve_cpu_arch(machine *machine)
 {
     int rc;
@@ -70,7 +70,7 @@ retrieve_cpu_arch(machine *machine)
     return (rc);
 }
 
-int
+static int
 retrieve_cpu_model(machine *machine)
 {
     int rc;
@@ -86,7 +86,7 @@ retrieve_cpu_model(machine *machine)
     return (rc);
 }
 
-int
+static int
 retrive_ncpus(machine *machine)
 {
     int rc;
@@ -98,7 +98,7 @@ retrive_ncpus(machine *machine)
     return (rc);
 }
 
-int
+static int
 retrive_physmem(machine *machine)
 {
     int rc;
@@ -110,7 +110,7 @@ retrive_physmem(machine *machine)
     return (rc);
 }
 
-int
+static int
 retrieve_os_name(machine *machine)
 {
     int rc;
@@ -126,7 +126,7 @@ retrieve_os_name(machine *machine)
     return (rc);
 }
 
-int
+static int
 retrieve_os_release(machine *machine)
 {
     int rc;
@@ -142,7 +142,7 @@ retrieve_os_release(machine *machine)
     return (rc);
 }
 
-int
+static int
 retrieve_os_version(machine *machine)
 {
     int rc;
