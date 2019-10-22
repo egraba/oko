@@ -152,7 +152,7 @@ retrieve_cpu_model(machine *machine)
 }
 
 static int
-retrive_ncpus(machine *machine)
+retrieve_ncpus(machine *machine)
 {
     int rc;
     size_t len;
@@ -164,7 +164,7 @@ retrive_ncpus(machine *machine)
 }
 
 static int
-retrive_physmem(machine *machine)
+retrieve_physmem(machine *machine)
 {
     int rc;
     size_t len;
@@ -255,10 +255,10 @@ collect_info(machine *machine)
     nerrors += retrieve_cpu_model(machine);
     
     /* cpu.ncpus */
-    nerrors += retrive_ncpus(machine);
+    nerrors += retrieve_ncpus(machine);
     
     /* memory.phys_mem */
-    nerrors += retrive_physmem(machine);
+    nerrors += retrieve_physmem(machine);
     
     /* memory.swap */
     
