@@ -161,19 +161,19 @@ retrieve_os_version(machine *machine)
 int
 collect_info(machine *machine)
 {
-    int rc;
+    int nerrors = 0;
     
     /* id */
     machine->id = 0;
     
     /* type */
-    rc = retrieve_type(machine);
+    nerrors += retrieve_type(machine);
     
     /* model */
-    rc = retrieve_model(machine);
+    nerrors += retrieve_model(machine);
     
     /* hostname */
-    rc = retrieve_hostname(machine);
+    nerrors += retrieve_hostname(machine);
     
     /* ipv4 */
     
@@ -182,27 +182,27 @@ collect_info(machine *machine)
     /* mac_address */
     
     /* cpu.arch */
-    rc = retrieve_cpu_arch(machine);
+    nerrors += retrieve_cpu_arch(machine);
     
     /* cpu.model */
-    rc = retrieve_cpu_model(machine);
+    nerrors += retrieve_cpu_model(machine);
     
     /* cpu.ncpus */
-    rc = retrive_ncpus(machine);
+    nerrors += retrive_ncpus(machine);
     
     /* memory.phys_mem */
-    rc = retrive_physmem(machine);
+    nerrors += retrive_physmem(machine);
     
     /* memory.swap */
     
     /* os.name */
-    rc = retrieve_os_name(machine);
+    nerrors += retrieve_os_name(machine);
     
     /* os.release */
-    rc = retrieve_os_release(machine);
+    nerrors += retrieve_os_release(machine);
     
     /* os.version */
-    rc = retrieve_os_version(machine);
+    nerrors += retrieve_os_version(machine);
     
-    return (rc);
+    return (nerrors);
 }
