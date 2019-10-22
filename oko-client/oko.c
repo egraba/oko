@@ -120,6 +120,45 @@ retrieve_ipv6(machine *machine)
 }
 
 static int
+retrieve_macaddress(machine *machine)
+{
+    int rc;
+    struct ifaddrs *ifa;
+    struct ifaddrs *ifs;
+    unsigned char *macaddr;
+    char *ip_if;
+
+    rc = getifaddrs(&ifs);
+    if (rc != 0) {
+        return (rc);
+    }
+    ip_if = strdup("en0");
+    
+    rc = -1;
+    for (ifa = ifs; ifa != NULL; ifa = ifa->ifa_next) {
+        if (!strcmp(ifa->ifa_name, ip_if)) {
+            if (ifa->ifa_addr->sa_family == AF_LINK) {
+                macaddr = malloc(sizeof(struct sockaddr));
+                macaddr = (unsigned char*)((struct sockaddr*)ifa->ifa_addr->sa_data);
+                macaddr += 9; /* To get the real MAC address */
+                machine->macaddress = malloc(sizeof(struct sockaddr));
+                sprintf(machine->macaddress,
+                    "%02x:%02x:%02x:%02x:%02x:%02x",
+                    *macaddr,
+                    *(macaddr + 1),
+                    *(macaddr + 2),
+                    *(macaddr + 3),
+                    *(macaddr + 4),
+                    *(macaddr + 5));
+                rc = 0;
+            }
+        }
+    }
+    
+    return (rc);
+}
+
+static int
 retrieve_cpu_arch(machine *machine)
 {
     int rc;
@@ -247,6 +286,7 @@ collect_info(machine *machine)
     nerrors += retrieve_ipv6(machine);
     
     /* mac_address */
+    nerrors += retrieve_macaddress(machine);
     
     /* cpu.arch */
     nerrors += retrieve_cpu_arch(machine);
