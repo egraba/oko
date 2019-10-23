@@ -333,3 +333,35 @@ collect_info(machine *machine)
     
     return (nerrors);
 }
+
+static int
+retrieve_cpu_usage(usage *usage)
+{
+    usage->cpu.usage = 0.0;
+    
+    return 0;
+}
+
+int
+collect_usage(usage *usage)
+{
+    int nerrors = 0;
+    
+    /* cpu.usage */
+    nerrors += retrieve_cpu_usage(usage);
+    
+    /* memory.memusage */
+    
+    /* memory.swapusage */
+    
+    /* network.pckin */
+    /* network.pckout */
+    /* network.pckinsec */
+    /* network.pckoutsec */
+    /* network.datain */
+    /* network.dataout */
+    /* network.datainsec */
+    /* network.dataoutsec */
+    
+    return (nerrors);
+}

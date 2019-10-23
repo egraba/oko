@@ -26,13 +26,28 @@ print_machine(machine *machine)
     printf("\tos.version %s\n", machine->os.version);
 }
 
+static void
+print_usage(usage *usage)
+{
+    printf("Usage\n");
+    printf("=====\n");
+    
+    for (;;) {
+        printf("\tcpu.usage: %f\n", usage->cpu.usage);
+    }
+}
+
 int
 main(int argc, const char * argv[])
 {
     machine m;
+    usage u;
     
     collect_info(&m);
     print_machine(&m);
+    
+    collect_usage(&u);
+    print_usage(&u);
     
     return (EXIT_SUCCESS);
 }
