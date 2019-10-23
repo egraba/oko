@@ -37,6 +37,12 @@ typedef struct {
         u_int64_t swapfree;
     } memory;
     struct {
+        int64_t readin;
+        int64_t writeout;
+        int64_t readinsec;
+        int64_t writeoutsec;
+    } io;
+    struct {
         int64_t pckin;
         int64_t pckout;
         int64_t pckinsec;
