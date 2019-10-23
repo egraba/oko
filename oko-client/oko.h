@@ -27,38 +27,6 @@ typedef struct {
     } os;
 } machine;
 
-
-
-typedef struct {
-    int usage;
-} swap;
-
-typedef struct {
-    int bytesread;
-    int byteswrite;
-} io;
-
-typedef struct {
-    int pckin;
-    int pckout;
-} network;
-
-typedef struct {
-    int pid;
-    char *name;
-    int cpuusage;
-    int memusage;
-    int bytesread;
-    int byteswrite;
-    int pckin;
-    int pckout;
-} process;
-
 int collect_info(machine *machine);
-/*int cpu_usage(cpu *cpu);
-int mem_usage(memory *memory);
-int swap_usage(swap *swap);
-int io_usage(io *io);
-int network_usage(network *network);*/
 
 #endif /* oko_h */
