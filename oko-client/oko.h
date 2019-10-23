@@ -14,7 +14,7 @@ typedef struct {
     struct {
         char *arch;
         char *model;
-        int16_t *ncpus;
+        int32_t ncpus;
     } cpu;
     struct {
         int64_t physmem;
