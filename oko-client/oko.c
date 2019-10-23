@@ -318,7 +318,7 @@ retrieve_cpu_usage(usage *usage)
 }
 
 static int
-retrieve_memory_memusage(usage *usage)
+retrieve_memory_usage(usage *usage)
 {
     size_t len;
     int32_t pagesize;
@@ -376,10 +376,19 @@ collect_usage(usage *usage)
     nerrors += retrieve_cpu_usage(usage);
     
     /* memory.memusage */
-    nerrors += retrieve_memory_memusage(usage);
+    nerrors += retrieve_memory_usage(usage);
     
     /* memory.swapusage */
     nerrors += retrieve_memory_swapusage(usage);
+    
+    /* io.pckin */
+    /* io.pckout */
+    /* io.pckinsec */
+    /* io.pckoutsec */
+    /* io.datain */
+    /* io.dataout */
+    /* io.datainsec */
+    /* io.dataoutsec */
     
     /* network.pckin */
     /* network.pckout */
