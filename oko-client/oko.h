@@ -41,6 +41,10 @@ typedef struct {
         int64_t writeout;
         int64_t readinsec;
         int64_t writeoutsec;
+        int64_t dataread;
+        int64_t datawritten;
+        int64_t datareadsec;
+        int64_t datawrittensec;
     } io;
     struct {
         int64_t pckin;
