@@ -320,7 +320,30 @@ retrieve_cpu_usage(usage *usage)
 static int
 retrieve_memory_memusage(usage *usage)
 {
-    /* NOT SUPPORTED */
+    size_t len;
+    int32_t pagesize;
+    int64_t free;
+    int64_t pages;
+    
+    len = sizeof(pagesize);
+    pagesize = 0;
+    if (sysctlbyname("vm.pagesize", &pagesize, &len, NULL, 0)) {
+        return 1;
+    }
+    
+    len = sizeof(pages);
+    pages = 0;
+    if (sysctlbyname("vm.pages", &pages, &len, NULL, 0)) {
+        return 1;
+    }
+    usage->memory.used = pagesize * pages;
+    
+    len = sizeof(free);
+    free = 0;
+    if (sysctlbyname("vm.page_free_count", &free, &len, NULL, 0)) {
+        return 1;
+    }
+    usage->memory.free = pagesize * free;
     
     return 0;
 }

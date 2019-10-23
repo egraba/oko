@@ -31,7 +31,8 @@ typedef struct {
         float usage;
     } cpu;
     struct {
-        int64_t memusage;
+        int64_t used;
+        int64_t free;
         u_int64_t swaptotal;
         u_int64_t swapused;
         u_int64_t swapfree;
