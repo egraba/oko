@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 #include "oko.h"
 
@@ -20,7 +21,6 @@ print_machine(machine *machine)
     printf("\tcpu.model: %s\n", machine->cpu.model);
     printf("\tcpu.ncpus: %d\n", machine->cpu.ncpus);
     printf("\tmemory.physmem: %lld\n", machine->memory.physmem);
-    printf("\tmemory.swap: %lld\n", machine->memory.swaptotal);
     printf("\tos.name: %s\n", machine->os.name);
     printf("\tos.release %s\n", machine->os.release);
     printf("\tos.version %s\n", machine->os.version);
@@ -29,11 +29,18 @@ print_machine(machine *machine)
 static void
 print_usage(usage *usage)
 {
+    int i;
+    
     printf("Usage\n");
     printf("=====\n");
     
-    for (;;) {
+    for (i = 0; i < 10; i++) {
         printf("\tcpu.usage: %f\n", usage->cpu.usage);
+        printf("\tmemory.memusage: %f\n", usage->memory.memusage);
+        printf("\tmemory.swaptotal: %lld\n", usage->memory.swaptotal);
+        printf("\tmemory.swapused: %lld\n", usage->memory.swapused);
+        printf("\tmemory.swapfree: %lld\n", usage->memory.swapfree);
+        sleep(1);
     }
 }
 
@@ -47,7 +54,7 @@ main(int argc, const char * argv[])
     print_machine(&m);
     
     collect_usage(&u);
-    //print_usage(&u);
+    print_usage(&u);
     
     return (EXIT_SUCCESS);
 }

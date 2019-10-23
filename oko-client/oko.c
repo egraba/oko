@@ -211,23 +211,6 @@ retrieve_physmem(machine *machine)
 }
 
 static int
-retrieve_swap(machine *machine)
-{
-    size_t len;
-    struct xsw_usage xsu;
-    
-    if (sysctlbyname("vm.swapusage", NULL, &len, NULL, 0)) {
-        return 1;
-    }
-    if (sysctlbyname("vm.swapusage", &xsu, &len, NULL, 0)) {
-        return 1;
-    }
-    machine->memory.swaptotal = xsu.xsu_total;
-    
-    return 0;
-}
-
-static int
 retrieve_os_name(machine *machine)
 {
     size_t len;
@@ -313,9 +296,6 @@ collect_info(machine *machine)
     /* memory.phys_mem */
     nerrors += retrieve_physmem(machine);
     
-    /* memory.swap */
-    nerrors += retrieve_swap(machine);
-    
     /* os.name */
     nerrors += retrieve_os_name(machine);
     
@@ -337,6 +317,33 @@ retrieve_cpu_usage(usage *usage)
     return 0;
 }
 
+static int
+retrieve_memory_memusage(usage *usage)
+{
+    /* NOT SUPPORTED */
+    
+    return 0;
+}
+
+static int
+retrieve_memory_swapusage(usage *usage)
+{
+    size_t len;
+    struct xsw_usage xsu;
+    
+    if (sysctlbyname("vm.swapusage", NULL, &len, NULL, 0)) {
+        return 1;
+    }
+    if (sysctlbyname("vm.swapusage", &xsu, &len, NULL, 0)) {
+        return 1;
+    }
+    usage->memory.swaptotal = xsu.xsu_total;
+    usage->memory.swapused = xsu.xsu_used;
+    usage->memory.swapfree = xsu.xsu_avail;
+    
+    return 0;
+}
+
 int
 collect_usage(usage *usage)
 {
@@ -346,8 +353,10 @@ collect_usage(usage *usage)
     nerrors += retrieve_cpu_usage(usage);
     
     /* memory.memusage */
+    nerrors += retrieve_memory_memusage(usage);
     
     /* memory.swapusage */
+    nerrors += retrieve_memory_swapusage(usage);
     
     /* network.pckin */
     /* network.pckout */

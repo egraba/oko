@@ -18,7 +18,6 @@ typedef struct {
     } cpu;
     struct {
         int64_t physmem;
-        u_int64_t swaptotal;
     } memory;
     struct {
         char *name;
@@ -33,7 +32,9 @@ typedef struct {
     } cpu;
     struct {
         int64_t memusage;
-        u_int64_t swapusage;
+        u_int64_t swaptotal;
+        u_int64_t swapused;
+        u_int64_t swapfree;
     } memory;
     struct {
         int64_t pckin;
