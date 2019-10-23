@@ -331,6 +331,7 @@ collect_info(machine *machine)
 static int
 retrieve_cpu_usage(usage *usage)
 {
+    /* NOT SUPPORTED */
     usage->cpu.usage = 0.0;
     
     return 0;
