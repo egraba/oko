@@ -27,6 +27,27 @@ typedef struct {
     } os;
 } machine;
 
+typedef struct {
+    struct {
+        float usage;
+    } cpu;
+    struct {
+        int64_t memusage;
+        u_int64_t swapusage;
+    } memory;
+    struct {
+        int64_t pckin;
+        int64_t pckout;
+        int64_t pckinsec;
+        int64_t pckoutsec;
+        int64_t datarec;
+        int64_t datasent;
+        int64_t datarecsec;
+        int64_t datasentsec;
+    } network;
+} usage;
+
 int collect_info(machine *machine);
+int collect_usage(usage *usage);
 
 #endif /* oko_h */
