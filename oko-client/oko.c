@@ -1,5 +1,7 @@
 #include <arpa/inet.h>
 #include <ifaddrs.h>
+#include <mach/mach_error.h>
+#include <mach/mach_host.h>
 #include <netinet/in.h>
 #include <sys/sysctl.h>
 #include <math.h>
@@ -308,11 +310,35 @@ collect_info(machine *machine)
     return (nerrors);
 }
 
+struct host_cpu_load_info cur;
+struct host_cpu_load_info prev;
+
 static int
 retrieve_cpu_usage(usage *usage)
 {
-    /* NOT SUPPORTED */
-    usage->cpu.usage = 0.0;
+    mach_port_t port;
+    mach_msg_type_number_t count;
+    struct host_cpu_load_info tmp;
+    int i, sum;
+    
+    count = HOST_CPU_LOAD_INFO_COUNT;
+    port = mach_host_self();
+    if (host_statistics(port, HOST_CPU_LOAD_INFO, (host_info_t) &cur, &count)) {
+        return 1;
+    }
+    
+    sum = 0;
+    for (i = 0; i < HOST_CPU_LOAD_INFO_COUNT; i++) {
+        tmp.cpu_ticks[i] = cur.cpu_ticks[i];
+        cur.cpu_ticks[i] -= prev.cpu_ticks[i];
+        prev.cpu_ticks[i] = tmp.cpu_ticks[i];
+        sum += cur.cpu_ticks[i];
+    }
+    
+    usage->cpu.user = (float) cur.cpu_ticks[CPU_STATE_USER] / (float) sum * 100;
+    usage->cpu.system = (float) cur.cpu_ticks[CPU_STATE_SYSTEM] / (float) sum * 100;
+    usage->cpu.idle = (float) cur.cpu_ticks[CPU_STATE_IDLE] / (float) sum * 100;
+    usage->cpu.nice = (float) cur.cpu_ticks[CPU_STATE_NICE] / (float) sum * 100;
     
     return 0;
 }
@@ -374,7 +400,10 @@ collect_usage(usage *usage)
 {
     int nerrors = 0;
     
-    /* cpu.usage */
+    /* cpu.user */
+    /* cpu.system */
+    /* cpu.idle */
+    /* cpu.nice */
     nerrors += retrieve_cpu_usage(usage);
     
     /* memory.used */

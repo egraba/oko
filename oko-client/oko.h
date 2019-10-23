@@ -28,7 +28,10 @@ typedef struct {
 
 typedef struct {
     struct {
-        float usage;
+        float user;
+        float system;
+        float idle;
+        float nice;
     } cpu;
     struct {
         int64_t used;

@@ -33,7 +33,10 @@ print_usage(usage *usage)
     printf("=====\n");
     
     for (;;) {
-        printf("\tcpu.usage: %f\n", usage->cpu.usage);
+        printf("\tcpu.user: %f\n", usage->cpu.user);
+        printf("\tcpu.system: %f\n", usage->cpu.system);
+        printf("\tcpu.idle: %f\n", usage->cpu.idle);
+        printf("\tcpu.nice: %f\n", usage->cpu.nice);
         printf("\tmemory.used: %lld\n", usage->memory.used);
         printf("\tmemory.free: %lld\n", usage->memory.free);
         printf("\tmemory.swaptotal: %lld\n", usage->memory.swaptotal);
