@@ -60,81 +60,74 @@ retrieve_hostname(machine *machine)
 static int
 retrieve_ipv4(machine *machine)
 {
-    int rc;
     struct ifaddrs *ifa;
     struct ifaddrs *ifs;
     struct sockaddr_in *ipv4;
     char *ip_if;
 
     ipv4 = malloc(sizeof(struct sockaddr_in));
-    rc = getifaddrs(&ifs);
-    if (rc != 0) {
-        return (rc);
+    if (getifaddrs(&ifs)) {
+        return 1;
     }
     ip_if = strdup("en0");
     
-    rc = -1;
     for (ifa = ifs; ifa != NULL; ifa = ifa->ifa_next) {
         if (!strcmp(ifa->ifa_name, ip_if)) {
             if (ifa->ifa_addr->sa_family == AF_INET) {
                 ipv4->sin_addr.s_addr = ((struct sockaddr_in*)(ifa->ifa_addr))->sin_addr.s_addr;
                 machine->ipv4 = malloc(INET_ADDRSTRLEN);
                 strncpy(machine->ipv4, inet_ntoa(ipv4->sin_addr), INET_ADDRSTRLEN);
-                rc = 0;
+                
+                return 0;
             }
         }
     }
     
-    return (rc);
+    return 1;
 }
 
 static int
 retrieve_ipv6(machine *machine)
 {
-    int rc;
     struct ifaddrs *ifa;
     struct ifaddrs *ifs;
     struct sockaddr_in6 *ipv6;
     char *ip_if;
 
     ipv6 = malloc(sizeof(struct sockaddr_in6));
-    rc = getifaddrs(&ifs);
-    if (rc != 0) {
-        return (rc);
+    if (getifaddrs(&ifs)) {
+        return 1;
     }
     ip_if = strdup("en0");
     
-    rc = -1;
     for (ifa = ifs; ifa != NULL; ifa = ifa->ifa_next) {
         if (!strcmp(ifa->ifa_name, ip_if)) {
             if (ifa->ifa_addr->sa_family == AF_INET6) {
                 ipv6->sin6_addr = ((struct sockaddr_in6*)(ifa->ifa_addr))->sin6_addr;
                 machine->ipv6 = malloc(INET6_ADDRSTRLEN);
                 inet_ntop(AF_INET6, (const void *)&ipv6->sin6_addr, machine->ipv6, INET6_ADDRSTRLEN);
-                rc = 0;
+                
+                return 0;
             }
         }
     }
     
-    return (rc);
+    return 1;
 }
 
 static int
 retrieve_macaddress(machine *machine)
 {
-    int rc;
     struct ifaddrs *ifa;
     struct ifaddrs *ifs;
     unsigned char *macaddr;
     char *ip_if;
 
-    rc = getifaddrs(&ifs);
-    if (rc != 0) {
-        return (rc);
+    if (getifaddrs(&ifs)) {
+        return 1;
     }
     ip_if = strdup("en0");
     
-    rc = -1;
     for (ifa = ifs; ifa != NULL; ifa = ifa->ifa_next) {
         if (!strcmp(ifa->ifa_name, ip_if)) {
             if (ifa->ifa_addr->sa_family == AF_LINK) {
@@ -150,12 +143,13 @@ retrieve_macaddress(machine *machine)
                     *(macaddr + 3),
                     *(macaddr + 4),
                     *(macaddr + 5));
-                rc = 0;
+                
+                return 0;
             }
         }
     }
     
-    return (rc);
+    return 1;
 }
 
 static int
