@@ -367,6 +367,8 @@ retrieve_memory_swapusage(usage *usage)
     return 0;
 }
 
+
+
 int
 collect_usage(usage *usage)
 {
@@ -375,10 +377,13 @@ collect_usage(usage *usage)
     /* cpu.usage */
     nerrors += retrieve_cpu_usage(usage);
     
-    /* memory.memusage */
+    /* memory.used */
+    /* memory.free */
     nerrors += retrieve_memory_usage(usage);
     
-    /* memory.swapusage */
+    /* memory.swaptotal */
+    /* memory.swapused */
+    /* memory.swapfree */
     nerrors += retrieve_memory_swapusage(usage);
     
     /* io.pckin */
