@@ -18,7 +18,7 @@ print_machine(machine *machine)
     printf("\tmacaddress: %s\n", machine->macaddress);
     printf("\tcpu.arch: %s\n", machine->cpu.arch);
     printf("\tcpu.model: %s\n", machine->cpu.model);
-    printf("\tcpu.ncpus: %hd\n", machine->cpu.ncpus);
+    printf("\tcpu.ncpus: %d\n", machine->cpu.ncpus);
     printf("\tmemory.physmem: %lld\n", machine->memory.physmem);
     printf("\tmemory.swap: %lld\n", machine->memory.swaptotal);
     printf("\tos.name: %s\n", machine->os.name);
