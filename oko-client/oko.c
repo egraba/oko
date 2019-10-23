@@ -215,6 +215,23 @@ retrieve_physmem(machine *machine)
 }
 
 static int
+retrieve_swap(machine *machine)
+{
+    int rc;
+    size_t len;
+    struct xsw_usage xsu;
+    
+    rc = sysctlbyname("vm.swapusage", NULL, &len, NULL, 0);
+    if (rc != 0) {
+        return (rc);
+    }
+    rc = sysctlbyname("vm.swapusage", &xsu, &len, NULL, 0);
+    machine->memory.swaptotal = xsu.xsu_total;
+    
+    return (rc);
+}
+
+static int
 retrieve_os_name(machine *machine)
 {
     int rc;
@@ -301,6 +318,7 @@ collect_info(machine *machine)
     nerrors += retrieve_physmem(machine);
     
     /* memory.swap */
+    nerrors += retrieve_swap(machine);
     
     /* os.name */
     nerrors += retrieve_os_name(machine);

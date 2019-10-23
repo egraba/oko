@@ -18,7 +18,7 @@ typedef struct {
     } cpu;
     struct {
         int64_t physmem;
-        char *swap;
+        u_int64_t swaptotal;
     } memory;
     struct {
         char *name;

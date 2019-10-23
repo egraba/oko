@@ -20,7 +20,7 @@ print_machine(machine *machine)
     printf("\tcpu.model: %s\n", machine->cpu.model);
     printf("\tcpu.ncpus: %d\n", machine->cpu.ncpus);
     printf("\tmemory.physmem: %ld\n", machine->memory.physmem);
-    printf("\tmemory.swap: %d\n", machine->memory.swap);
+    printf("\tmemory.swap: %d\n", machine->memory.swaptotal);
     printf("\tos.name: %s\n", machine->os.name);
     printf("\tos.release %s\n", machine->os.release);
     printf("\tos.version %s\n", machine->os.version);
