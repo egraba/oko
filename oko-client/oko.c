@@ -14,11 +14,11 @@ retrieve_type(machine *machine)
 {
     size_t len;
     
-    if (sysctlbyname("hw.targettype", NULL, &len, NULL, 0) != 0) {
+    if (sysctlbyname("hw.targettype", NULL, &len, NULL, 0)) {
         return 1;
     }
     machine->type = malloc(len);
-    if (sysctlbyname("hw.targettype", machine->type, &len, NULL, 0) != 0) {
+    if (sysctlbyname("hw.targettype", machine->type, &len, NULL, 0)) {
         return 1;
     }
     
@@ -30,11 +30,11 @@ retrieve_model(machine *machine)
 {
     size_t len;
     
-    if (sysctlbyname("hw.model", NULL, &len, NULL, 0) != 0) {
+    if (sysctlbyname("hw.model", NULL, &len, NULL, 0)) {
         return 1;
     }
     machine->model = malloc(len);
-    if (sysctlbyname("hw.model", machine->model, &len, NULL, 0) != 0) {
+    if (sysctlbyname("hw.model", machine->model, &len, NULL, 0)) {
         return 1;
     }
     
@@ -46,11 +46,11 @@ retrieve_hostname(machine *machine)
 {
     size_t len;
     
-    if (sysctlbyname("kern.hostname", NULL, &len, NULL, 0) != 0) {
+    if (sysctlbyname("kern.hostname", NULL, &len, NULL, 0)) {
         return 1;
     }
     machine->hostname = malloc(len);
-    if (sysctlbyname("kern.hostname", machine->hostname, &len, NULL, 0) != 0) {
+    if (sysctlbyname("kern.hostname", machine->hostname, &len, NULL, 0)) {
         return 1;
     }
     
@@ -163,11 +163,11 @@ retrieve_cpu_arch(machine *machine)
 {
     size_t len;
     
-    if (sysctlbyname("hw.machine", NULL, &len, NULL, 0) != 0) {
+    if (sysctlbyname("hw.machine", NULL, &len, NULL, 0)) {
         return 1;
     }
     machine->cpu.arch = malloc(len);
-    if (sysctlbyname("hw.machine", machine->cpu.arch, &len, NULL, 0) != 0) {
+    if (sysctlbyname("hw.machine", machine->cpu.arch, &len, NULL, 0)) {
         return 1;
     }
     
@@ -179,11 +179,11 @@ retrieve_cpu_model(machine *machine)
 {
     size_t len;
     
-    if (sysctlbyname("machdep.cpu.brand_string", NULL, &len, NULL, 0) != 0) {
+    if (sysctlbyname("machdep.cpu.brand_string", NULL, &len, NULL, 0)) {
         return 1;
     }
     machine->cpu.model = malloc(len);
-    if (sysctlbyname("machdep.cpu.brand_string", machine->cpu.model, &len, NULL, 0) != 0) {
+    if (sysctlbyname("machdep.cpu.brand_string", machine->cpu.model, &len, NULL, 0)) {
         return 1;
     }
     
@@ -196,7 +196,7 @@ retrieve_ncpus(machine *machine)
     size_t len;
     
     len = sizeof(machine->cpu.ncpus);
-    if (sysctlbyname("hw.ncpu", &(machine->cpu.ncpus), &len, NULL, 0) != 0) {
+    if (sysctlbyname("hw.ncpu", &(machine->cpu.ncpus), &len, NULL, 0)) {
         return 1;
     }
     
@@ -209,7 +209,7 @@ retrieve_physmem(machine *machine)
     size_t len;
     
     len = sizeof(machine->memory.physmem);
-    if (sysctlbyname("hw.memsize", &(machine->memory.physmem), &len, NULL, 0) != 0) {
+    if (sysctlbyname("hw.memsize", &(machine->memory.physmem), &len, NULL, 0)) {
         return 1;
     }
     
@@ -222,10 +222,10 @@ retrieve_swap(machine *machine)
     size_t len;
     struct xsw_usage xsu;
     
-    if (sysctlbyname("vm.swapusage", NULL, &len, NULL, 0) != 0) {
+    if (sysctlbyname("vm.swapusage", NULL, &len, NULL, 0)) {
         return 1;
     }
-    if (sysctlbyname("vm.swapusage", &xsu, &len, NULL, 0) != 0) {
+    if (sysctlbyname("vm.swapusage", &xsu, &len, NULL, 0)) {
         return 1;
     }
     machine->memory.swaptotal = xsu.xsu_total;
@@ -238,11 +238,11 @@ retrieve_os_name(machine *machine)
 {
     size_t len;
     
-    if (sysctlbyname("kern.ostype", NULL, &len, NULL, 0) != 0) {
+    if (sysctlbyname("kern.ostype", NULL, &len, NULL, 0)) {
         return 1;
     }
     machine->os.name = malloc(len);
-    if (sysctlbyname("kern.ostype", machine->os.name, &len, NULL, 0) != 0) {
+    if (sysctlbyname("kern.ostype", machine->os.name, &len, NULL, 0)) {
         return 1;
     }
     
@@ -254,11 +254,11 @@ retrieve_os_release(machine *machine)
 {
     size_t len;
     
-    if (sysctlbyname("kern.osrelease", NULL, &len, NULL, 0) != 0) {
+    if (sysctlbyname("kern.osrelease", NULL, &len, NULL, 0)) {
         return 1;
     }
     machine->os.release = malloc(len);
-    if (sysctlbyname("kern.osrelease", machine->os.release, &len, NULL, 0) != 0) {
+    if (sysctlbyname("kern.osrelease", machine->os.release, &len, NULL, 0)) {
         return 1;
     }
     
@@ -274,7 +274,7 @@ retrieve_os_version(machine *machine)
         return 1;
     }
     machine->os.version = malloc(len);
-    if (sysctlbyname("kern.version", machine->os.version, &len, NULL, 0) != 0) {
+    if (sysctlbyname("kern.version", machine->os.version, &len, NULL, 0)) {
         return 1;
     }
     

@@ -47,7 +47,7 @@ main(int argc, const char * argv[])
     print_machine(&m);
     
     collect_usage(&u);
-    print_usage(&u);
+    //print_usage(&u);
     
     return (EXIT_SUCCESS);
 }
