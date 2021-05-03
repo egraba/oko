@@ -62,7 +62,7 @@ typedef struct {
     } network;
 } usage;
 
-int collect_info(machine *machine);
-int collect_usage(usage *usage);
+int collect_machine_info(machine *machine);
+int collect_machine_usage(usage *usage);
 
 #endif /* oko_h */

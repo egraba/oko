@@ -261,7 +261,7 @@ retrieve_os_version(machine *machine)
 }
 
 int
-collect_info(machine *machine)
+collect_machine_info(machine *machine)
 {
     int nerrors = 0;
     
@@ -396,7 +396,7 @@ retrieve_memory_swapusage(usage *usage)
 
 
 int
-collect_usage(usage *usage)
+collect_machine_usage(usage *usage)
 {
     int nerrors = 0;
     

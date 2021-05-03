@@ -5,7 +5,7 @@
 #include "oko.h"
 
 static void
-print_machine(machine *machine)
+print_machine_info(machine *machine)
 {
     printf("Machine\n");
     printf("======\n");
@@ -27,7 +27,7 @@ print_machine(machine *machine)
 }
 
 static void
-print_usage(usage *usage)
+print_machine_usage(usage *usage)
 {
     printf("Usage\n");
     printf("=====\n");
@@ -52,11 +52,11 @@ main(int argc, const char * argv[])
     machine m;
     usage u;
     
-    collect_info(&m);
-    print_machine(&m);
+    collect_machine_info(&m);
+    print_machine_info(&m);
     
-    collect_usage(&u);
-    print_usage(&u);
+    collect_machine_usage(&u);
+    print_machine_usage(&u);
     
     return (EXIT_SUCCESS);
 }
