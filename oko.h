@@ -8,8 +8,7 @@ typedef struct {
     char *type;
     char *model;
     char *hostname;
-    char *ipv4;
-    char *ipv6;
+    char *ip;
     char *macaddress;
     struct {
         char *arch;
@@ -66,8 +65,7 @@ typedef struct {
 int retrieve_type(machine *machine);
 int retrieve_model(machine *machine);
 int retrieve_hostname(machine *machine);
-int retrieve_ipv4(machine *machine);
-int retrieve_ipv6(machine *machine);
+int retrieve_ip(machine *machine);
 int retrieve_macadress(machine *machine);
 int retrieve_cpu_arch(machine *machine);
 int retrive_cpu_model(machine *machine);

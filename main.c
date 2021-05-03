@@ -11,8 +11,7 @@ print_machine_info(machine *machine)
     printf("\ttype: %s\n", machine->type);
     printf("\tmodel: %s\n", machine->model);
     printf("\thostname: %s\n", machine->hostname);
-    printf("\tipv4: %s\n", machine->ipv4);
-    printf("\tipv6: %s\n", machine->ipv6);
+    printf("\tip: %s\n", machine->ip);
     printf("\tmacaddress: %s\n", machine->macaddress);
     printf("\tcpu.arch: %s\n", machine->cpu.arch);
     printf("\tcpu.model: %s\n", machine->cpu.model);

@@ -60,7 +60,7 @@ retrieve_hostname(machine *machine)
 }
 
 int
-retrieve_ipv4(machine *machine)
+retrieve_ip(machine *machine)
 {
     struct ifaddrs *ifa;
     struct ifaddrs *ifs;
@@ -77,37 +77,8 @@ retrieve_ipv4(machine *machine)
         if (!strcmp(ifa->ifa_name, ip_if)) {
             if (ifa->ifa_addr->sa_family == AF_INET) {
                 ipv4->sin_addr.s_addr = ((struct sockaddr_in*)(ifa->ifa_addr))->sin_addr.s_addr;
-                machine->ipv4 = malloc(INET_ADDRSTRLEN);
-                strncpy(machine->ipv4, inet_ntoa(ipv4->sin_addr), INET_ADDRSTRLEN);
-                
-                return 0;
-            }
-        }
-    }
-    
-    return 1;
-}
-
-int
-retrieve_ipv6(machine *machine)
-{
-    struct ifaddrs *ifa;
-    struct ifaddrs *ifs;
-    struct sockaddr_in6 *ipv6;
-    char *ip_if;
-
-    ipv6 = malloc(sizeof(struct sockaddr_in6));
-    if (getifaddrs(&ifs)) {
-        return 1;
-    }
-    ip_if = strdup("en0");
-    
-    for (ifa = ifs; ifa != NULL; ifa = ifa->ifa_next) {
-        if (!strcmp(ifa->ifa_name, ip_if)) {
-            if (ifa->ifa_addr->sa_family == AF_INET6) {
-                ipv6->sin6_addr = ((struct sockaddr_in6*)(ifa->ifa_addr))->sin6_addr;
-                machine->ipv6 = malloc(INET6_ADDRSTRLEN);
-                inet_ntop(AF_INET6, (const void *)&ipv6->sin6_addr, machine->ipv6, INET6_ADDRSTRLEN);
+                machine->ip = malloc(INET_ADDRSTRLEN);
+                strncpy(machine->ip, inet_ntoa(ipv4->sin_addr), INET_ADDRSTRLEN);
                 
                 return 0;
             }
@@ -277,11 +248,8 @@ collect_machine_info(machine *machine)
     /* hostname */
     nerrors += retrieve_hostname(machine);
     
-    /* ipv4 */
-    nerrors += retrieve_ipv4(machine);
-    
-    /* ipv6 */
-    nerrors += retrieve_ipv6(machine);
+    /* ip */
+    nerrors += retrieve_ip(machine);
     
     /* mac_address */
     nerrors += retrieve_macaddress(machine);
