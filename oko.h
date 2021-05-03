@@ -62,7 +62,27 @@ typedef struct {
     } network;
 } usage;
 
+
+int retrieve_type(machine *machine);
+int retrieve_model(machine *machine);
+int retrieve_hostname(machine *machine);
+int retrieve_ipv4(machine *machine);
+int retrieve_ipv6(machine *machine);
+int retrieve_macadress(machine *machine);
+int retrieve_cpu_arch(machine *machine);
+int retrive_cpu_model(machine *machine);
+int retrieve_ncpus(machine *machine);
+int retrieve_physmem(machine *machine);
+int retrieve_os_name(machine *machine);
+int retrieve_os_release(machine *machine);
+int retrieve_os_version(machine *machine);
+
 int collect_machine_info(machine *machine);
+
+int retrieve_cpu_usage(usage *usage);
+int retrieve_memory_usage(usage *usage)
+int retrieve_memory_swapusage(usage *usage)
+
 int collect_machine_usage(usage *usage);
 
 #endif /* oko_h */

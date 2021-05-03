@@ -11,7 +11,7 @@
 
 #include "oko.h"
 
-static int
+int
 retrieve_type(machine *machine)
 {
     size_t len;
@@ -27,7 +27,7 @@ retrieve_type(machine *machine)
     return 0;
 }
 
-static int
+int
 retrieve_model(machine *machine)
 {
     size_t len;
@@ -43,7 +43,7 @@ retrieve_model(machine *machine)
     return 0;
 }
 
-static int
+int
 retrieve_hostname(machine *machine)
 {
     size_t len;
@@ -59,7 +59,7 @@ retrieve_hostname(machine *machine)
     return 0;
 }
 
-static int
+int
 retrieve_ipv4(machine *machine)
 {
     struct ifaddrs *ifa;
@@ -88,7 +88,7 @@ retrieve_ipv4(machine *machine)
     return 1;
 }
 
-static int
+int
 retrieve_ipv6(machine *machine)
 {
     struct ifaddrs *ifa;
@@ -117,7 +117,7 @@ retrieve_ipv6(machine *machine)
     return 1;
 }
 
-static int
+int
 retrieve_macaddress(machine *machine)
 {
     struct ifaddrs *ifa;
@@ -154,7 +154,7 @@ retrieve_macaddress(machine *machine)
     return 1;
 }
 
-static int
+int
 retrieve_cpu_arch(machine *machine)
 {
     size_t len;
@@ -170,7 +170,7 @@ retrieve_cpu_arch(machine *machine)
     return 0;
 }
 
-static int
+int
 retrieve_cpu_model(machine *machine)
 {
     size_t len;
@@ -186,7 +186,7 @@ retrieve_cpu_model(machine *machine)
     return 0;
 }
 
-static int
+int
 retrieve_ncpus(machine *machine)
 {
     size_t len;
@@ -199,7 +199,7 @@ retrieve_ncpus(machine *machine)
     return 0;
 }
 
-static int
+int
 retrieve_physmem(machine *machine)
 {
     size_t len;
@@ -212,7 +212,7 @@ retrieve_physmem(machine *machine)
     return 0;
 }
 
-static int
+int
 retrieve_os_name(machine *machine)
 {
     size_t len;
@@ -228,7 +228,7 @@ retrieve_os_name(machine *machine)
     return 0;
 }
 
-static int
+int
 retrieve_os_release(machine *machine)
 {
     size_t len;
@@ -244,7 +244,7 @@ retrieve_os_release(machine *machine)
     return 0;
 }
 
-static int
+int
 retrieve_os_version(machine *machine)
 {
     size_t len;
@@ -313,7 +313,7 @@ collect_machine_info(machine *machine)
 struct host_cpu_load_info cur;
 struct host_cpu_load_info prev;
 
-static int
+int
 retrieve_cpu_usage(usage *usage)
 {
     mach_port_t port;
@@ -343,7 +343,7 @@ retrieve_cpu_usage(usage *usage)
     return 0;
 }
 
-static int
+int
 retrieve_memory_usage(usage *usage)
 {
     size_t len;
@@ -374,7 +374,7 @@ retrieve_memory_usage(usage *usage)
     return 0;
 }
 
-static int
+int
 retrieve_memory_swapusage(usage *usage)
 {
     size_t len;
