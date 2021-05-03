@@ -287,7 +287,8 @@ retrieve_cpu_usage(usage *usage)
     mach_port_t port;
     mach_msg_type_number_t count;
     struct host_cpu_load_info tmp;
-    int i, sum;
+    unsigned int i;
+    int sum;
     
     count = HOST_CPU_LOAD_INFO_COUNT;
     port = mach_host_self();
