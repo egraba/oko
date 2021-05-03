@@ -7,9 +7,6 @@
 static void
 print_machine_info(machine *machine)
 {
-    printf("Machine\n");
-    printf("======\n");
-    
     printf("\tid: %d\n", machine->id);
     printf("\ttype: %s\n", machine->type);
     printf("\tmodel: %s\n", machine->model);
@@ -29,21 +26,15 @@ print_machine_info(machine *machine)
 static void
 print_machine_usage(usage *usage)
 {
-    printf("Usage\n");
-    printf("=====\n");
-    
-    for (;;) {
-        printf("\tcpu.user: %f\n", usage->cpu.user);
-        printf("\tcpu.system: %f\n", usage->cpu.system);
-        printf("\tcpu.idle: %f\n", usage->cpu.idle);
-        printf("\tcpu.nice: %f\n", usage->cpu.nice);
-        printf("\tmemory.used: %lld\n", usage->memory.used);
-        printf("\tmemory.free: %lld\n", usage->memory.free);
-        printf("\tmemory.swaptotal: %lld\n", usage->memory.swaptotal);
-        printf("\tmemory.swapused: %lld\n", usage->memory.swapused);
-        printf("\tmemory.swapfree: %lld\n", usage->memory.swapfree);
-        sleep(1);
-    }
+    printf("\tcpu.user: %.2f %%\n", usage->cpu.user);
+    printf("\tcpu.system: %.2f %%\n", usage->cpu.system);
+    printf("\tcpu.idle: %.2f %%\n", usage->cpu.idle);
+    printf("\tcpu.nice: %.2f %%\n", usage->cpu.nice);
+    printf("\tmemory.used: %lld\n", usage->memory.used);
+    printf("\tmemory.free: %lld\n", usage->memory.free);
+    printf("\tmemory.swaptotal: %lld\n", usage->memory.swaptotal);
+    printf("\tmemory.swapused: %lld\n", usage->memory.swapused);
+    printf("\tmemory.swapfree: %lld\n", usage->memory.swapfree);
 }
 
 int
@@ -53,10 +44,20 @@ main(int argc, const char * argv[])
     usage u;
     
     collect_machine_info(&m);
+
+    printf("Machine\n");
+    printf("=======\n");
     print_machine_info(&m);
     
-    collect_machine_usage(&u);
-    print_machine_usage(&u);
-    
+   
+    for (;;) {
+    	collect_machine_usage(&u);
+
+	printf("Usage\n");
+    	printf("=====\n");
+    	print_machine_usage(&u);
+	sleep(2);
+    }
+
     return (EXIT_SUCCESS);
 }
