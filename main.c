@@ -1,3 +1,5 @@
+#include <assert.h>
+#include <pthread.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -5,6 +7,13 @@
 #include <ncurses.h>
 
 #include "oko.h"
+
+typedef struct {
+	WINDOW *win;
+	int line;
+	int col;
+	usage *usage;
+} usage_display_data;
 
 static void
 print_machine_info(WINDOW *win, int line, int col, machine *machine)
@@ -50,34 +59,73 @@ print_machine_usage(WINDOW *win, int line, int col, usage *usage)
 	wrefresh(win);
 }
 
+static void*
+print_machine_usage_routine(usage_display_data *udd)
+{
+	for (;;) {
+		collect_machine_usage(udd->usage);
+
+		box(udd->win, ACS_VLINE, ACS_HLINE);
+		print_machine_usage(udd->win, udd->line, udd->col, udd->usage);
+		sleep(2);
+		wclear(udd->win);
+	}
+	
+	return NULL;
+}
+
+static void
+launch_thread(void *routine, void *data)
+{
+    pthread_attr_t attr;
+    pthread_t thread_id;
+    int rc, thread_error;
+ 
+    rc = pthread_attr_init(&attr);
+    assert(!rc);
+    rc = pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
+    assert(!rc);
+ 
+    thread_error = pthread_create(&thread_id, &attr, routine, data);
+ 
+    rc = pthread_attr_destroy(&attr);
+    assert(!rc);
+    if (thread_error != 0)
+    {
+         // Report an error.
+    }
+}
+
+
+
 int
 main(int argc, const char * argv[])
 {
 	machine m;
 	usage u;
 	WINDOW *topw, *bottomw;
+	usage_display_data udd;
 
 	initscr();
 	topw = subwin(stdscr, LINES / 2, COLS, 0, 0);
 	bottomw = subwin(stdscr, LINES / 2, COLS, LINES / 2, 0);
 	box(topw, ACS_VLINE, ACS_HLINE);
-	box(bottomw, ACS_VLINE, ACS_HLINE);
 	
 	collect_machine_info(&m);
 	print_machine_info(topw, 1, 1, &m);
 
-	for (;;) {
-		collect_machine_usage(&u);
-		print_machine_usage(bottomw, 1, 1, &u);
-		sleep(2);
-	}
+	udd.win = bottomw;
+	udd.line = 1;
+	udd.col = 1;
+	udd.usage = &u;
 
+	launch_thread(&print_machine_usage_routine, (usage_display_data *) &udd);
+	
 	getch();
 	endwin();
 
 	free(topw);
 	free(bottomw);
-	
     
 	return (EXIT_SUCCESS);
 }
