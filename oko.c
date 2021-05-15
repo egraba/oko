@@ -132,11 +132,11 @@ retrieve_macaddress(machine *machine)
 		if (!strcmp(ifa->ifa_name, ip_if)) {
 			if (ifa->ifa_addr->sa_family == AF_LINK) {
 				macaddr = malloc(sizeof(struct sockaddr));
-				macaddr = (unsigned char*)((struct sockaddr*)ifa->ifa_addr->sa_data);
+				macaddr = (unsigned char*) ifa->ifa_addr->sa_data;
 				macaddr += 9; /* To get the real MAC address */
-				machine->macaddress = malloc(sizeof(struct sockaddr));
+				machine->macaddress = malloc(17);
 				sprintf(machine->macaddress,
-					"%02x:%02x:%02x:%02x:%02x:%02x",
+					"%.2X:%02X:%02X:%02X:%02X:%02X",
 					*macaddr,
 					*(macaddr + 1),
 					*(macaddr + 2),
