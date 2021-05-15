@@ -26,8 +26,8 @@ print_machine_info(WINDOW *win, int line, int col, machine *machine)
 	mvwprintw(win, ++line, col, "type: %s", machine->type);
 	mvwprintw(win, ++line, col, "model: %s", machine->model);
 	mvwprintw(win, ++line, col, "hostname: %s", machine->hostname);
-	mvwprintw(win, ++line, col, "ip: %s", machine->ip);
-	mvwprintw(win, ++line, col, "macaddress: %s", machine->macaddress);
+	mvwprintw(win, ++line, col, "network.ip: %s", machine->network.ip);
+	mvwprintw(win, ++line, col, "network.macaddress: %s", machine->network.macaddress);
 	mvwprintw(win, ++line, col, "cpu.arch: %s", machine->cpu.arch);
 	mvwprintw(win, ++line, col, "cpu.model: %s", machine->cpu.model);
 	mvwprintw(win, ++line, col, "cpu.ncpus: %d", machine->cpu.ncpus);

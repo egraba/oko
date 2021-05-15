@@ -8,8 +8,10 @@ typedef struct {
 	char *type;
 	char *model;
 	char *hostname;
-	char *ip;
-	char *macaddress;
+	struct {
+		char *ip;
+		char *macaddress;
+	} network;
 	struct {
 		char *arch;
 		char *model;

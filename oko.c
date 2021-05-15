@@ -104,8 +104,8 @@ retrieve_ip(machine *machine)
 		if (!strcmp(ifa->ifa_name, ip_if)) {
 			if (ifa->ifa_addr->sa_family == AF_INET) {
 				ipv4->sin_addr.s_addr = ((struct sockaddr_in*)(ifa->ifa_addr))->sin_addr.s_addr;
-				machine->ip = malloc(INET_ADDRSTRLEN);
-				strncpy(machine->ip, inet_ntoa(ipv4->sin_addr), INET_ADDRSTRLEN);
+				machine->network.ip = malloc(INET_ADDRSTRLEN);
+				strncpy(machine->network.ip, inet_ntoa(ipv4->sin_addr), INET_ADDRSTRLEN);
                 
 				return 0;
 			}
@@ -134,8 +134,8 @@ retrieve_macaddress(machine *machine)
 				macaddr = malloc(sizeof(struct sockaddr));
 				macaddr = (unsigned char*) ifa->ifa_addr->sa_data;
 				macaddr += 9; /* To get the real MAC address */
-				machine->macaddress = malloc(17);
-				sprintf(machine->macaddress,
+				machine->network.macaddress = malloc(17);
+				sprintf(machine->network.macaddress,
 					"%.2X:%02X:%02X:%02X:%02X:%02X",
 					*macaddr,
 					*(macaddr + 1),
