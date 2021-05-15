@@ -4,7 +4,7 @@
 #include <stdint.h>
 
 typedef struct {
-	int32_t id;
+	char *serialnumber;
 	char *type;
 	char *model;
 	char *hostname;
@@ -61,7 +61,7 @@ typedef struct {
 	} network;
 } usage;
 
-
+int retrieve_serial_number(machine *machine);
 int retrieve_type(machine *machine);
 int retrieve_model(machine *machine);
 int retrieve_hostname(machine *machine);

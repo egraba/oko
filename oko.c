@@ -9,7 +9,34 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <CoreFoundation/CoreFoundation.h>
+#include <IOKit/IOKitLib.h>
+
 #include "oko.h"
+
+int
+retrieve_serialnumber(machine *machine)
+{
+	io_service_t platform_expert;
+
+	platform_expert = IOServiceGetMatchingService(kIOMasterPortDefault,
+		IOServiceMatching("IOPlatformExpertDevice"));
+
+	if (platform_expert) {
+		CFTypeRef serialNumberAsCFString = 
+		IORegistryEntryCreateCFProperty(platform_expert,
+			CFSTR(kIOPlatformSerialNumberKey),
+			kCFAllocatorDefault, 0);
+		
+		if (serialNumberAsCFString) {
+			machine->serialnumber = (char *) CFStringGetCStringPtr(serialNumberAsCFString, CFStringGetSystemEncoding());
+		}
+
+		IOObjectRelease(platform_expert);
+	}
+
+	return 0;
+}
 
 int
 retrieve_type(machine *machine)
@@ -237,7 +264,7 @@ collect_machine_info(machine *machine)
 	int nerrors = 0;
     
 	/* id */
-	machine->id = 0;
+	nerrors += retrieve_serialnumber(machine);
     
 	/* type */
 	nerrors += retrieve_type(machine);

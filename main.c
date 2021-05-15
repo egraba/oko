@@ -22,7 +22,7 @@ print_machine_info(WINDOW *win, int line, int col, machine *machine)
 	mvwprintw(win, line, col, "Machine");
 	wattroff(win, A_BOLD);
 
-	mvwprintw(win, ++line, col, "id: %d", machine->id);
+	mvwprintw(win, ++line, col, "serialnumber: %s", machine->serialnumber);
 	mvwprintw(win, ++line, col, "type: %s", machine->type);
 	mvwprintw(win, ++line, col, "model: %s", machine->model);
 	mvwprintw(win, ++line, col, "hostname: %s", machine->hostname);

@@ -2,16 +2,16 @@
 # Makefile for MacOs 
 #
 
-CC	= clang -g
+CC		= clang -g
 CFLAGS	= -Wall -Wextra
 
 EXEC	= oko
-SRC	= main.c oko.c
-LIB	= -lncurses
+SRC		= main.c oko.c
+LIBS	= -framework CoreFoundation -framework IOKit -lncurses
 OBJS	= ${SRC:.c=.o}
 
 all: ${OBJS}
-	${CC} ${CFLAGS} $(LIB) -o ${EXEC} ${OBJS}
+	${CC} ${CFLAGS} $(LIBS) -o ${EXEC} ${OBJS}
 
 clean):
 	rm) -f ${EXEC}
