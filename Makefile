@@ -13,6 +13,6 @@ OBJS	= ${SRC:.c=.o}
 all: ${OBJS}
 	${CC} ${CFLAGS} $(LIBS) -o ${EXEC} ${OBJS}
 
-clean):
-	rm) -f ${EXEC}
+clean:
+	rm -f ${EXEC}
 	rm -f *.o
