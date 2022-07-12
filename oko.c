@@ -19,7 +19,7 @@ retrieve_serialnumber(machine *machine)
 {
 	io_service_t platform_expert;
 
-	platform_expert = IOServiceGetMatchingService(kIOMasterPortDefault,
+	platform_expert = IOServiceGetMatchingService(kIOMainPortDefault,
 		IOServiceMatching("IOPlatformExpertDevice"));
 
 	if (platform_expert) {
