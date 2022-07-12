@@ -29,7 +29,8 @@ retrieve_serialnumber(machine *machine)
 			kCFAllocatorDefault, 0);
 		
 		if (serialNumberAsCFString) {
-			machine->serialnumber = (char *) CFStringGetCStringPtr(serialNumberAsCFString, CFStringGetSystemEncoding());
+			machine->serialnumber = (char *) CFStringGetCStringPtr(serialNumberAsCFString,
+				CFStringGetSystemEncoding());
 		}
 
 		IOObjectRelease(platform_expert);
