@@ -1,5 +1,5 @@
 #
-# Makefile for MacOs 
+# Makefile for macOS 
 #
 
 CC		= clang -g
