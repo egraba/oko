@@ -68,9 +68,11 @@ print_machine_usage_routine(usage_display_data *udd)
 		collect_machine_usage(udd->usage);
 
 		if (startup) sleep(1); /* To avoid strange screen at startup */
+		
 		box(udd->win, ACS_VLINE, ACS_HLINE);
 		print_machine_usage(udd->win, udd->line, udd->col, udd->usage);
 		wclear(udd->win);
+		
 		if (!startup) sleep(2);
 		startup = 0;
 	}
