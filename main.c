@@ -15,6 +15,13 @@ typedef struct {
 	usage *usage;
 } usage_display_data;
 
+
+static void print_instructions(WINDOW *win, int line, int col)
+{
+	mvwprintw(win, line, col, "OKO <o> - Press 'q' to exit.");
+	wrefresh(win);
+}
+
 static void
 print_machine_info(WINDOW *win, int line, int col, machine *machine)
 {
@@ -80,7 +87,7 @@ print_machine_usage_routine(usage_display_data *udd)
 	return NULL;
 }
 
-static void
+static int
 launch_thread(void *routine, void *data)
 {
     pthread_attr_t attr;
@@ -96,10 +103,10 @@ launch_thread(void *routine, void *data)
  
     rc = pthread_attr_destroy(&attr);
     assert(!rc);
-    if (thread_error != 0)
-    {
-         // Report an error.
-    }
+    
+    if (thread_error != 0) return 1;
+
+    return 0;
 }
 
 
@@ -109,14 +116,17 @@ main(int argc, const char * argv[])
 {
 	machine m;
 	usage u;
-	WINDOW *topw, *bottomw;
+	WINDOW *instw, *topw, *bottomw;
 	usage_display_data udd;
 
 	initscr();
-	topw = subwin(stdscr, LINES / 2, COLS, 0, 0);
+	instw = subwin(stdscr, 1, COLS, 0, 0);  
+	topw = subwin(stdscr, LINES / 2 - 1, COLS, 1, 0);
 	bottomw = subwin(stdscr, LINES / 2, COLS, LINES / 2, 0);
 	box(topw, ACS_VLINE, ACS_HLINE);
 	
+	print_instructions(instw, 0, 0);
+
 	collect_machine_info(&m);
 	print_machine_info(topw, 1, 1, &m);
 
@@ -127,7 +137,8 @@ main(int argc, const char * argv[])
 
 	launch_thread(&print_machine_usage_routine, (usage_display_data *) &udd);
 	
-	getch();
+	noecho();
+	while (getch() != 'q');
 	endwin();
 
 	free(topw);
