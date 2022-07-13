@@ -109,10 +109,8 @@ launch_thread(void *routine, void *data)
     return 0;
 }
 
-
-
-int
-main(int argc, const char * argv[])
+static int
+display_mode()
 {
 	machine m;
 	usage u;
@@ -144,5 +142,36 @@ main(int argc, const char * argv[])
 	free(topw);
 	free(bottomw);
     
+	return (EXIT_SUCCESS);
+}
+
+static void
+print_usage()
+{
+	printf("Usage: oko [-h]\n");
+}
+
+
+int
+main(int argc, char * const argv[])
+{
+	int opt;
+
+	if (argc < 2) {
+		display_mode();
+	}
+
+	while ((opt = getopt(argc, argv, "h")) != -1) {
+		switch(opt) {
+			case 'h':
+				print_usage();
+				return (EXIT_SUCCESS);
+			
+			default:
+				print_usage();
+				return (EXIT_FAILURE);	
+		}
+	}
+
 	return (EXIT_SUCCESS);
 }
