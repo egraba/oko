@@ -70,7 +70,7 @@ int retrieve_hostname(machine *machine);
 int retrieve_ip(machine *machine);
 int retrieve_macadress(machine *machine);
 int retrieve_cpu_arch(machine *machine);
-int retrive_cpu_model(machine *machine);
+int retrieve_cpu_model(machine *machine);
 int retrieve_ncpus(machine *machine);
 int retrieve_physmem(machine *machine);
 int retrieve_os_name(machine *machine);
