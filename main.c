@@ -2,11 +2,15 @@
 #include <pthread.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
 
 #include <ncurses.h>
 
 #include "oko.h"
+
+#define DEFAULT_INTERVAL 2
+int interval = DEFAULT_INTERVAL;
 
 typedef struct {
 	WINDOW *win;
@@ -80,7 +84,7 @@ print_machine_usage_routine(usage_display_data *udd)
 		print_machine_usage(udd->win, udd->line, udd->col, udd->usage);
 		wclear(udd->win);
 		
-		if (!startup) sleep(2);
+		if (!startup) sleep(interval);
 		startup = 0;
 	}
 	
@@ -157,21 +161,33 @@ main(int argc, char * const argv[])
 {
 	int opt;
 
+	int is_interval = 0;
+
+	char *interval_arg;
+	
 	if (argc < 2) {
 		display_mode();
 	}
 
-	while ((opt = getopt(argc, argv, "h")) != -1) {
+	while ((opt = getopt(argc, argv, "hi:")) != -1) {
 		switch(opt) {
 			case 'h':
 				print_usage();
 				return (EXIT_SUCCESS);
-			
+
+			case 'i':
+				is_interval = 1;
+				interval_arg = strdup(optarg);
+				interval = strtonum(interval_arg, 0, 10, NULL);
+				break;
+
 			default:
 				print_usage();
 				return (EXIT_FAILURE);	
 		}
 	}
+
+	if (is_interval) display_mode();
 
 	return (EXIT_SUCCESS);
 }
