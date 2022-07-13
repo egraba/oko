@@ -161,12 +161,13 @@ main(int argc, char * const argv[])
 {
 	int opt;
 
+	int no_option = 0;
 	int is_interval = 0;
 
 	char *interval_arg;
 	
 	if (argc < 2) {
-		display_mode();
+		no_option = 1;
 	}
 
 	while ((opt = getopt(argc, argv, "hi:")) != -1) {
@@ -187,6 +188,7 @@ main(int argc, char * const argv[])
 		}
 	}
 
+	if (no_option) display_mode();
 	if (is_interval) display_mode();
 
 	return (EXIT_SUCCESS);
