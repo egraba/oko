@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <unistd.h>
 
 #include "log.h"
 
@@ -38,4 +39,21 @@ log_machine_usage(usage *usage)
 	printf("memory.swapused: %lld", usage->memory.swapused);
 	printf("memory.swapfree: %lld", usage->memory.swapfree);
 	printf("\n");
+}
+
+int
+log_mode(int interval)
+{
+	machine m;
+	usage u;
+	
+	collect_machine_info(&m);
+	log_machine_info(&m);
+	
+	for (;;) {
+		log_machine_usage(&u);
+		sleep(interval);
+	}
+	
+	return 0;	
 }

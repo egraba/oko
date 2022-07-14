@@ -11,23 +11,6 @@
 
 #define DEFAULT_INTERVAL 2
 
-static int
-log_mode(int interval)
-{
-	machine m;
-	usage u;
-	
-	collect_machine_info(&m);
-	log_machine_info(&m);
-	
-	for (;;) {
-		log_machine_usage(&u);
-		sleep(interval);
-	}
-	
-	return (EXIT_SUCCESS);	
-}
-
 static void
 print_usage()
 {
