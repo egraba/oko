@@ -9,7 +9,7 @@
 void
 print_instructions(WINDOW *win, int line, int col)
 {
-	mvwprintw(win, line, col, "OKO <o> - Press 'q' to exit.");
+	mvwprintw(win, line, col, "oko <o> - Press 'q' to exit.");
 	wrefresh(win);
 }
 
