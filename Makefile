@@ -6,7 +6,7 @@ CC		= clang -g
 CFLAGS	= -Wall -Wextra
 
 EXEC	= oko
-SRC		= display.c log.c main.c oko.c utils.c
+SRC		= cJSON.c display.c log.c main.c oko.c utils.c
 LIBS	= -framework CoreFoundation -framework IOKit -lncurses
 OBJS	= ${SRC:.c=.o}
 
