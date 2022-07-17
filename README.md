@@ -4,7 +4,7 @@ Agent collecting information about the OS on which it is installed.
 ## Supported OSes
 * macOS (11 & 12)
 
-## Supported data
+## Collected data
 
 ### Machine data
 * Machine info (Serial number, type, model)
