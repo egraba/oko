@@ -1,6 +1,8 @@
 #ifndef log_h
 #define log_h
 
+#include <time.h>
+
 #include "cJSON.h"
 #include "oko.h"
 

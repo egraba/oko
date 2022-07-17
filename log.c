@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <time.h>
 #include <unistd.h>
 
 #include "log.h"
@@ -56,6 +57,9 @@ init_machine_info_json(machine *machine)
 void
 log_machine_info(machine *machine)
 {
+	time_t t = time(NULL);
+	struct tm tm = *localtime(&t);
+
 	cJSON_SetValuestring(serialnumber, machine->serialnumber);
 	cJSON_SetValuestring(type, machine->type);
 	cJSON_SetValuestring(model, machine->model);
@@ -76,7 +80,9 @@ log_machine_info(machine *machine)
 	cJSON_SetValuestring(release, machine->os.release);
 	cJSON_SetValuestring(version, machine->os.version);
 	
-	printf("%s\n", cJSON_PrintUnformatted(json_machine));
+	printf("[oko] %02d-%02d-%02d %02d:%02d:%02d -- MACHINE -- %s\n",
+		tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900, tm.tm_hour, tm.tm_min, tm.tm_sec,
+		cJSON_PrintUnformatted(json_machine));
 }
 
 void
@@ -114,6 +120,9 @@ init_machine_usage_json(usage *usage)
 void
 log_machine_usage(usage *usage)
 {
+	time_t t = time(NULL);
+	struct tm tm = *localtime(&t);
+
 	cJSON_SetNumberValue(cpu_user, usage->cpu.user);
 	cJSON_SetNumberValue(cpu_system, usage->cpu.system);
 	cJSON_SetNumberValue(cpu_idle, usage->cpu.idle);
@@ -125,7 +134,9 @@ log_machine_usage(usage *usage)
 	cJSON_SetNumberValue(swapused, usage->memory.swapused);
 	cJSON_SetNumberValue(swapfree, usage->memory.swapfree);
 	
-	printf("%s\n", cJSON_PrintUnformatted(json_usage));
+	printf("[oko] %02d-%02d-%02d %02d:%02d:%02d -- USAGE -- %s\n",
+		tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900, tm.tm_hour, tm.tm_min, tm.tm_sec,
+		cJSON_PrintUnformatted(json_usage));
 }
 
 int
