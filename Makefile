@@ -6,16 +6,16 @@ CC		= clang -g
 CFLAGS	= -Wall -Wextra
 
 EXEC	= oko
-SRC		= $(wildcard *.c)
+SRC		= $(wildcard src/*.c)
 LIBS	= -framework CoreFoundation -framework IOKit -lncurses
-OBJS	= $(SRC:.c=.o)
+OBJS	= $(SRC:src/.c=build/.o)
 
 .PHONY: all clean
 .DEFAULT: all
-	
+
 all: $(OBJS)
 	$(CC) $(CFLAGS) $(LIBS) -o $(EXEC) $(OBJS)
 
 clean:
 	rm -f $(EXEC)
-	rm -f *.o
+	rm -rdf $(EXEC).dSYM
