@@ -1,30 +1,24 @@
 #include <stdio.h>
+
 #include "minunit.h"
+
+#include "oko.h"
  
 int tests_run = 0;
  
-int foo = 7;
-int bar = 4;
- 
 static char*
-test_foo()
+test_retrieve_serial_number()
 {
-    mu_assert("error, foo != 7", foo == 7);
-    return 0;
-}
-
-static char*
-test_bar()
-{
-    mu_assert("error, bar != 5", bar == 5);
+    machine m;
+    //retrieve_serialnumber(&m);
+    mu_assert("machine.serialnumber != NULL", m.serialnumber != NULL);
     return 0;
 }
 
 static char*
 all_tests()
 {
-    mu_run_test(test_foo);
-    mu_run_test(test_bar);
+    mu_run_test(test_retrieve_serial_number);
     return 0;
 }
 

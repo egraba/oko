@@ -63,7 +63,7 @@ typedef struct {
 	} network;
 } usage;
 
-int retrieve_serial_number(machine *machine);
+int retrieve_serialnumber(machine *machine);
 int retrieve_type(machine *machine);
 int retrieve_model(machine *machine);
 int retrieve_hostname(machine *machine);
