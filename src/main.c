@@ -11,14 +11,17 @@
 
 #define DEFAULT_INTERVAL 2
 
+const char usage_message[] =
+	"Usage: oko [options]\n"
+	"Options:\n"
+	"    -h               Print this message and exit.\n"
+	"    -i [interval]    Sets refresh interval (in seconds).\n"
+	"    -l               Log the output instead of displaying it on the terminal.\n";
+
 static void
 print_usage()
 {
-	printf("Usage: oko [options]\n");
-	printf("Options:\n");
-	printf("\t-h\t\tPrint this message and exit.\n");
-	printf("\t-i [interval]\tSets refresh interval (in seconds).\n");
-	printf("\t-l\t\tLog the output instead of displaying it on the terminal.\n");
+	printf("%s", usage_message);
 }
 
 int
