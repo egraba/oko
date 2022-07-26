@@ -1,2 +1,4 @@
 oko
-*.o
+oko.dSYM
+oko_test
+oko_test.dSYM
