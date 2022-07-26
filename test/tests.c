@@ -1,3 +1,4 @@
+#include <ctype.h>
 #include <stdio.h>
 
 #include "minunit.h"
@@ -10,8 +11,8 @@ static char*
 test_retrieve_serial_number()
 {
     machine m;
-    //retrieve_serialnumber(&m);
-    mu_assert("machine.serialnumber != NULL", m.serialnumber != NULL);
+    retrieve_serialnumber(&m);
+    mu_assert("machine.serialnumber != NULL", isalnum(m.serialnumber[0]));
     return 0;
 }
 
