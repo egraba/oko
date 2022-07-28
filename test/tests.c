@@ -1,5 +1,7 @@
 #include <ctype.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 #include "minunit.h"
 
@@ -11,8 +13,20 @@ static char*
 test_retrieve_serial_number()
 {
     machine m;
+    char serialnumber[12];
+    FILE* fp;
+    
     retrieve_serialnumber(&m);
-    mu_assert("machine.serialnumber != NULL", isalnum(m.serialnumber[0]));
+    
+    system("system_profiler SPHardwareDataType | grep Serial | cut -c 31-42 > serialnumber_test.txt");
+    fp = fopen("serialnumber_test.txt", "r");
+    while (fgets(serialnumber, sizeof(serialnumber), fp) != NULL) {
+        printf("%s", serialnumber);
+    }
+    fclose(fp);
+
+    mu_assert("machine.serialnumber is WRONG", strcmp(m.serialnumber, serialnumber));
+    
     return 0;
 }
 
