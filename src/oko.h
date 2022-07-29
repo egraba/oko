@@ -68,7 +68,7 @@ int retrieve_type(machine *machine);
 int retrieve_model(machine *machine);
 int retrieve_hostname(machine *machine);
 int retrieve_ip(machine *machine);
-int retrieve_macadress(machine *machine);
+int retrieve_macaddress(machine *machine);
 int retrieve_cpu_arch(machine *machine);
 int retrieve_cpu_model(machine *machine);
 int retrieve_ncpus(machine *machine);
