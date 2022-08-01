@@ -1,232 +1,235 @@
+#include <check.h>
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-#include "minunit.h"
 #include "testutils.h"
 
 #include "oko.h"
  
-int tests_run = 0;
- 
-static char*
-test_retrieve_serial_number()
+START_TEST(test_retrieve_serial_number)
 {
     machine m;
-    char serialnumber[12];
+    char *serialnumber = (char *) malloc(12);
     
     retrieve_serialnumber(&m);
     execute("system_profiler SPHardwareDataType | grep Serial | awk '{print $4}'", serialnumber);
     
-    mu_assert("machine.serialnumber is WRONG", strcmp(m.serialnumber, serialnumber));
-    
-    return 0;
-}
+    ck_assert_str_eq(m.serialnumber, serialnumber);
 
-static char*
-test_retrieve_type()
+    free(serialnumber);
+}
+END_TEST
+
+START_TEST(test_retrieve_type)
 {
     machine m;
-    char type[10];
+    char *type = (char *) malloc(10);
     
     retrieve_type(&m);
     execute("sysctl hw.targettype | awk '{print $2}'", type);
     
-    mu_assert("machine.type is WRONG", strcmp(m.type, type));
-    
-    return 0;
-}
+    ck_assert_str_eq(m.type, type);
 
-static char*
-test_retrieve_model()
+    free(type);
+}
+END_TEST
+
+START_TEST(test_retrieve_model)
 {
     machine m;
-    char model[100];
+    char *model = (char *) malloc(100);
 
     retrieve_model(&m);
     execute("system_profiler SPHardwareDataType | grep 'Model Identifier' | awk '{print $3}'", model);
     
-    mu_assert("machine.model is WRONG", strcmp(m.model, model));
+    ck_assert_str_eq(m.model, model);
 
-    return 0;
+    free(model);
 }
+END_TEST
 
-static char*
-test_retrieve_hostname()
+START_TEST(test_retrieve_hostname)
 {
     machine m;
-    char hostname[253];
+    char *hostname = (char *) malloc(253);
     
     retrieve_hostname(&m);
     execute("hostname", hostname);
 
-    mu_assert("machine.hostname is WRONG", strcmp(m.hostname, hostname));
+    ck_assert_str_eq(m.hostname, hostname);
 
-    return 0;
+    free(hostname);
 }
+END_TEST
 
-static char*
-test_retrieve_ip()
+START_TEST(test_retrieve_ip)
 {
     machine m;
-    char ip[16];
+    char *ip = (char *) malloc(16);
 
     retrieve_ip(&m);
     execute("ifconfig | grep \"inet \" | grep -Fv 127.0.0.1 | awk '{print $2}'", ip);
 
-    mu_assert("machine.ip is WRONG", strcmp(m.network.ip, ip));
+    ck_assert_str_eq(m.network.ip, ip);
 
-    return 0;
+    free(ip);
 }
+END_TEST
 
-static char*
-test_retrieve_macaddress()
+START_TEST(test_retrieve_macaddress)
 {
     machine m;
-    char macaddress[18];
+    char *macaddress = (char *) malloc(18);
 
     retrieve_macaddress(&m);
     execute("ifconfig en0 | grep \"ether \" | awk '{print $2}'", macaddress);
 
-    mu_assert("machine.macaddress is WRONG", strcmp(m.network.macaddress, macaddress));
+    ck_assert_str_eq(m.network.macaddress, macaddress);
 
-    return 0;
+    free(macaddress);
 }
+END_TEST
 
-static char*
-test_retrieve_cpu_arch()
+START_TEST(test_retrieve_cpu_arch)
 {
     machine m;
-    char cpu_arch[32];
+    char *cpu_arch = (char *) malloc(32);
 
     retrieve_cpu_arch(&m);
     execute("sysctl hw.machine | awk '{print $2}'", cpu_arch);
 
-    mu_assert("machine.cpu.arch is WRONG", strcmp(m.cpu.arch, cpu_arch));
+    ck_assert_str_eq(m.cpu.arch, cpu_arch);
 
-    return 0;
+    free(cpu_arch);
 }
+END_TEST
 
-static char*
-test_retrieve_cpu_model()
+START_TEST(test_retrieve_cpu_model)
 {
     machine m;
-    char cpu_model[255];
+    char *cpu_model = (char *) malloc(255);
 
     retrieve_cpu_model(&m);
-    execute("sysctl machdep.cpu.brand_string | awk '{print $2}'", cpu_model);
+    execute("sysctl machdep.cpu.brand_string | awk '{print $2\" \"$3\" \"$4\" \"$5\" \"$6\" \"$7}'", cpu_model);
 
-    mu_assert("machine.cpu.model is WRONG", strcmp(m.cpu.model, cpu_model));
+    ck_assert_str_eq(m.cpu.model, cpu_model);
 
-    return 0;
+    free(cpu_model);
 }
+END_TEST
 
-static char*
-test_retrieve_ncpus()
+START_TEST(test_retrieve_ncpus)
 {
     machine m;
-    char ncpus[3];
+    char *ncpus = (char *) malloc(3);
 
     retrieve_ncpus(&m);
     execute("sysctl hw.ncpu | awk '{print $2}'", ncpus);
 
-    mu_assert("machine.cpu.ncpus is WRONG", m.cpu.ncpus == atoi(ncpus));
+    ck_assert_int_eq(m.cpu.ncpus, atoi(ncpus));
 
-    return 0;
+    free(ncpus);
 }
+END_TEST
 
-static char*
-test_retrieve_physmem()
+START_TEST(test_retrieve_physmem)
 {
     machine m;
-    char physmem[255];
-    char pm[255];
-
+    char *physmem = (char *) malloc(255);
+    
     retrieve_physmem(&m);
     execute("sysctl hw.memsize | awk '{print $2}'", physmem);
 
-    sprintf(pm, "%lld", m.memory.physmem);
-    mu_assert("machine.physmem is WRONG", strcmp(pm, physmem));
+    ck_assert_int_eq(m.memory.physmem, atol(physmem));
 
-    return 0;
+    free(physmem);
 }
+END_TEST
 
-static char*
-test_retrieve_os_name()
+START_TEST(test_retrieve_os_name)
 {
     machine m;
-    char os_name[255];
+    char *os_name = malloc(255);
  
     retrieve_os_name(&m);
     execute("uname -s", os_name);
 
-    mu_assert("machine.os_name is WRONG", strcmp(m.os.name, os_name));
+    ck_assert_str_eq(m.os.name, os_name);
 
-    return 0;
+    free(os_name);
 }
+END_TEST
 
-static char*
-test_retrieve_os_release()
+START_TEST(test_retrieve_os_release)
 {
     machine m;
-    char os_release[255];
+    char *os_release = malloc(255);
     
     retrieve_os_release(&m);
     execute("uname -r", os_release);
 
-    mu_assert("machine.os_release is WRONG", strcmp(m.os.release, os_release));
+    ck_assert_str_eq(m.os.release, os_release);
 
-    return 0;
+    free(os_release);
 }
+END_TEST
 
-static char*
-test_retrieve_os_version()
+START_TEST(test_retrieve_os_version)
 {
     machine m;
-    char os_version[255];
+    char *os_version = (char *) malloc(255);
     
     retrieve_os_version(&m);
     execute("uname -v", os_version);
     
-    mu_assert("machine.os_version is WRONG", strcmp(m.os.version, os_version));
+    ck_assert_str_eq(m.os.version, os_version);
 
-    return 0;
+    free(os_version);
 }
+END_TEST
 
-static char*
-all_tests()
+Suite *
+oko_suite()
 {
-    mu_run_test(test_retrieve_serial_number);
-    mu_run_test(test_retrieve_type);
-    mu_run_test(test_retrieve_model);
-    mu_run_test(test_retrieve_ip);
-    mu_run_test(test_retrieve_macaddress);
-    mu_run_test(test_retrieve_hostname);
-    mu_run_test(test_retrieve_cpu_arch);
-    mu_run_test(test_retrieve_cpu_model);
-    mu_run_test(test_retrieve_ncpus);
-    mu_run_test(test_retrieve_physmem);
-    mu_run_test(test_retrieve_os_name);
-    mu_run_test(test_retrieve_os_release);
-    mu_run_test(test_retrieve_os_version);
+    Suite *s;
+    TCase *tc_machine;
+
+    s = suite_create("oko");
     
-    return 0;
+    tc_machine = tcase_create("Machine");
+    tcase_add_test(tc_machine, test_retrieve_serial_number);
+    tcase_add_test(tc_machine, test_retrieve_type);
+    tcase_add_test(tc_machine, test_retrieve_model);
+    tcase_add_test(tc_machine, test_retrieve_ip);
+    tcase_add_test(tc_machine, test_retrieve_macaddress);
+    tcase_add_test(tc_machine, test_retrieve_hostname);
+    tcase_add_test(tc_machine, test_retrieve_cpu_arch);
+    tcase_add_test(tc_machine, test_retrieve_cpu_model);
+    tcase_add_test(tc_machine, test_retrieve_ncpus);
+    tcase_add_test(tc_machine, test_retrieve_physmem);
+    tcase_add_test(tc_machine, test_retrieve_os_name);
+    tcase_add_test(tc_machine, test_retrieve_os_release);
+    tcase_add_test(tc_machine, test_retrieve_os_version);
+    suite_add_tcase(s, tc_machine);
+
+    return s;
 }
 
 int
 main(void)
 {
-    char *result = all_tests();
+    int number_failed;
+    Suite *s;
+    SRunner *sr;
+
+    s = oko_suite();
+    sr = srunner_create(s);
+
+    srunner_run_all(sr, CK_NORMAL);
+    number_failed = srunner_ntests_failed(sr);
+    srunner_free(sr);
     
-    if (result != 0) {
-        printf("%s\n", result);
-    }
-    else {
-        printf("ALL TESTS PASSED\n");
-    }
-
-    printf("Tests run: %d\n", tests_run);
-
-    return result != 0;
+    return (number_failed == 0) ? EXIT_SUCCESS : EXIT_FAILURE;
 }

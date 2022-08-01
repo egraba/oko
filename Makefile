@@ -12,7 +12,7 @@ OBJS		= $(SRC:src/.c=.o)
 
 EXEC_TEST 	= oko_test
 SRC_TEST	= $(wildcard test/*.c)
-LIBS_TEST	= -I src
+LIBS_TEST	= -I src -lcheck
 OBJS_TEST	= $(SRC_TEST:test/.c=.o)
 
 .PHONY: all test clean

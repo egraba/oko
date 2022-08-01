@@ -137,7 +137,7 @@ retrieve_macaddress(machine *machine)
 				macaddr += 9; /* To get the real MAC address */
 				machine->network.macaddress = malloc(17);
 				sprintf(machine->network.macaddress,
-					"%.2X:%02X:%02X:%02X:%02X:%02X",
+					"%.2x:%02x:%02x:%02x:%02x:%02x",
 					*macaddr,
 					*(macaddr + 1),
 					*(macaddr + 2),

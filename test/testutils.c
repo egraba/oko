@@ -12,12 +12,13 @@ execute(const char* command, char* result)
 	FILE* fp;
 	int rc;
     char cmd[1024] = "";
+    size_t len = 0;
+    ssize_t chars;
 
     strcat(cmd, command);
     strcat(cmd, " > ");
     strcat(cmd, TESTFILE_NAME);
-    printf("cmd: %s\n", cmd);
-
+    
     rc = system(cmd);
     if (rc) {
     	printf("Could not execute the command: %s\n", cmd);
@@ -30,10 +31,8 @@ execute(const char* command, char* result)
     	return 1;
     }
 
-    while (fgets(result, sizeof(result), fp) != NULL) {
-        printf("%s", result);
-    }
-    
+    chars = getline(&result, &len, fp);
+    result[chars - 1] = '\0';
     fclose(fp);
 
     return 0;
