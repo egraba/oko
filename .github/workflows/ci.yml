@@ -15,6 +15,9 @@ jobs:
     - name: Build
       run: make
 
+    - name: Add testing library
+      run: brew install check
+
     - name: Build tests
       run: make test
 
