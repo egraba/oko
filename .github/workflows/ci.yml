@@ -22,4 +22,4 @@ jobs:
       run: make test
 
     - name: Run tests
-      run: ls && pwd
+      run: ls -l && pwd
