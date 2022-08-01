@@ -12,5 +12,11 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - name: make
+    - name: Build
       run: make
+
+    - name: Build tests
+      run: make test
+
+    - name: Run tests
+      run: ./oko-tests
