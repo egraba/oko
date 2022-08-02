@@ -191,6 +191,21 @@ START_TEST(test_retrieve_os_version)
 }
 END_TEST
 
+START_TEST(test_retrieve_cpu_usage)
+{
+    usage u;
+    int cu;
+
+    /*
+     * It is not possible to perform tests with enough accuracy.
+     * Therefore, the test consists in checking that the sum of the different usage percentages is 100.
+     */
+    retrieve_cpu_usage(&u);
+    cu = u.cpu.user + u.cpu.system + u.cpu.idle;
+    ck_assert_int_eq(cu, 100);
+}
+END_TEST
+
 START_TEST(test_retrieve_memory_usage)
 {
     usage u;
@@ -280,6 +295,7 @@ oko_suite()
     suite_add_tcase(s, tc_machine);
 
     tc_usage = tcase_create("Usage");
+    tcase_add_test(tc_usage, test_retrieve_cpu_usage);
     tcase_add_test(tc_usage, test_retrieve_memory_usage);
     tcase_add_test(tc_usage, test_retrieve_memory_swapusage);
     suite_add_tcase(s, tc_usage);
