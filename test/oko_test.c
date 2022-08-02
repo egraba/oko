@@ -1,9 +1,10 @@
-#include <check.h>
 #include <ctype.h>
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+#include <check.h>
 
 #include "testutils.h"
 
