@@ -1,5 +1,6 @@
 #include <check.h>
 #include <ctype.h>
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -190,11 +191,44 @@ START_TEST(test_retrieve_os_version)
 }
 END_TEST
 
+START_TEST(test_retrieve_memory_swapusage)
+{
+    usage u;
+    char *swaptotal = (char *) malloc(10);
+    char *swapused = (char *) malloc(10);
+    char *swapfree = (char *) malloc(10);
+    char *s = (char *) malloc(10);
+    
+    retrieve_memory_swapusage(&u);
+    
+    execute("sysctl -a | grep swapusage | awk '{print $4}'", swaptotal);
+    sprintf(s, "%.2fM", u.memory.swaptotal / pow(1024, 2));
+
+    ck_assert_str_eq(s, swaptotal);
+    
+    execute("sysctl -a | grep swapusage | awk '{print $7}'", swapused);
+    sprintf(s, "%.2fM", u.memory.swapused / pow(1024, 2));
+
+    ck_assert_str_eq(s, swapused);
+
+    execute("sysctl -a | grep swapusage | awk '{print $10}'", swapfree);
+    sprintf(s, "%.2fM", u.memory.swapfree / pow(1024, 2));
+
+    ck_assert_str_eq(s, swapfree);
+
+    free(swaptotal);
+    free(swapused);
+    free(swapfree);
+    free(s);
+}
+END_TEST
+
 Suite *
 oko_suite()
 {
     Suite *s;
     TCase *tc_machine;
+    TCase *tc_usage;
 
     s = suite_create("oko");
     
@@ -213,6 +247,10 @@ oko_suite()
     tcase_add_test(tc_machine, test_retrieve_os_release);
     tcase_add_test(tc_machine, test_retrieve_os_version);
     suite_add_tcase(s, tc_machine);
+
+    tc_usage = tcase_create("Usage");
+    tcase_add_test(tc_usage, test_retrieve_memory_swapusage);
+    suite_add_tcase(s, tc_usage);
 
     return s;
 }
