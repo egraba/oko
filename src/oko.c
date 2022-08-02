@@ -264,7 +264,7 @@ collect_machine_info(machine *machine)
 {
 	int nerrors = 0;
     
-	/* id */
+	/* serialnumber */
 	nerrors += retrieve_serialnumber(machine);
     
 	/* type */
@@ -276,10 +276,10 @@ collect_machine_info(machine *machine)
 	/* hostname */
 	nerrors += retrieve_hostname(machine);
     
-	/* ip */
+	/* network.ip */
 	nerrors += retrieve_ip(machine);
     
-	/* mac_address */
+	/* network.macaddress */
 	nerrors += retrieve_macaddress(machine);
     
 	/* cpu.arch */
@@ -291,7 +291,7 @@ collect_machine_info(machine *machine)
 	/* cpu.ncpus */
 	nerrors += retrieve_ncpus(machine);
     
-	/* memory.phys_mem */
+	/* memory.physmem */
 	nerrors += retrieve_physmem(machine);
     
 	/* os.name */
