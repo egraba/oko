@@ -191,6 +191,37 @@ START_TEST(test_retrieve_os_version)
 }
 END_TEST
 
+START_TEST(test_retrieve_memory_usage)
+{
+    usage u;
+    char *mem_used = (char *) malloc(10);
+    char *mem_free = (char *) malloc(10);
+    int upper_margin, lower_margin;
+
+    retrieve_memory_usage(&u);
+
+    execute("sysctl vm.pages | awk '{print $2*4096}'", mem_used);
+    
+    ck_assert_uint_eq(atol(mem_used), u.memory.used);
+
+    execute("sysctl vm.page_free_count | awk '{print $2*4096}'", mem_free);
+    
+    /* 5% margin */
+    upper_margin = u.memory.free + 0.05 * u.memory.free;
+    lower_margin = u.memory.free - 0.05 * u.memory.free;
+    long mf = atol(mem_free);
+    if (mf < upper_margin) {
+        ck_assert_uint_lt(mf, upper_margin);
+    }
+    else {
+        ck_assert_uint_ge(mf, lower_margin);
+    }
+
+    free(mem_used);
+    free(mem_free);
+}
+END_TEST
+
 START_TEST(test_retrieve_memory_swapusage)
 {
     usage u;
@@ -249,6 +280,7 @@ oko_suite()
     suite_add_tcase(s, tc_machine);
 
     tc_usage = tcase_create("Usage");
+    tcase_add_test(tc_usage, test_retrieve_memory_usage);
     tcase_add_test(tc_usage, test_retrieve_memory_swapusage);
     suite_add_tcase(s, tc_usage);
 
