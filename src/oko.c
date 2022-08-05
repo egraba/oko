@@ -20,9 +20,30 @@ int
 retrieve_serialnumber(machine *machine)
 {
 	io_service_t platform_expert;
+	size_t len;
+	char *os_release;
+	int major_version;
+	mach_port_t mp;
 
-	platform_expert = IOServiceGetMatchingService(kIOMainPortDefault,
-		IOServiceMatching("IOPlatformExpertDevice"));
+	if (sysctlbyname("kern.osrelease", NULL, &len, NULL, 0)) {
+		return 1;
+	}
+	os_release = malloc(len);
+	if (sysctlbyname("kern.osrelease", os_release, &len, NULL, 0)) {
+		return 1;
+	}
+	sscanf (os_release, "%d.", &major_version); 
+	free(os_release);
+
+	/* Check whether macOS version is greater or equal to Monterey. */
+	if (major_version >= 21) {
+		mp = kIOMainPortDefault;
+	}
+	else {
+		mp = kIOMasterPortDefault;	
+	}
+
+	platform_expert = IOServiceGetMatchingService(mp, IOServiceMatching("IOPlatformExpertDevice"));
 
 	if (platform_expert) {
 		CFTypeRef serialNumberAsCFString = 
@@ -35,10 +56,13 @@ retrieve_serialnumber(machine *machine)
 				CFStringGetSystemEncoding());
 		}
 		else {
-			machine->serialnumber = strdup("__VM__");
+			return 1;
 		}
 
 		IOObjectRelease(platform_expert);
+	}
+	else {
+		return 1;
 	}
 
 	return 0;
