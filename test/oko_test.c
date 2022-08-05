@@ -199,8 +199,8 @@ END_TEST
 START_TEST(test_retrieve_memory_usage)
 {
     usage u;
-    char *mem_used = (char *) malloc(10);
-    char *mem_free = (char *) malloc(10);
+    char *mem_used = (char *) malloc(20);
+    char *mem_free = (char *) malloc(20);
 
     retrieve_memory_usage(&u);
 
