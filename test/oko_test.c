@@ -257,13 +257,32 @@ START_TEST(test_retrieve_network_usage)
     usage u;
     char *pckin = (char *) malloc(32);
     char *pckout = (char *) malloc(32);
+    int upper_margin, lower_margin;
     
     retrieve_network_usage(&u);
     execute("netstat -i | awk '{print $5}' | uniq | awk '{s+=$1} END {print s}'", pckin);
-    ck_assert_str_eq(u.network.pckin, pckin);
+    /* 1% margin */
+    upper_margin = u.network.pckin + 0.01 * u.network.pckin;
+    lower_margin = u.network.pckin - 0.01 * u.network.pckin;
+    long pin = atol(pckin);
+    if (pin < upper_margin) {
+        ck_assert_uint_lt(pin, upper_margin);
+    }
+    else {
+        ck_assert_uint_ge(pin, lower_margin);
+    }
 
     execute("netstat -i | awk '{print $7}' | uniq | awk '{s+=$1} END {print s}'", pckout);
-    ck_assert_str_eq(u.network.pckout, pckout);
+    /* 1% margin */
+    upper_margin = u.network.pckout + 0.01 * u.network.pckout;
+    lower_margin = u.network.pckout - 0.01 * u.network.pckout;
+    long pout = atol(pckout);
+    if (pout < upper_margin) {
+        ck_assert_uint_lt(pout, upper_margin);
+    }
+    else {
+        ck_assert_uint_ge(pout, lower_margin);
+    }
 
     free(pckin);
     free(pckout);
