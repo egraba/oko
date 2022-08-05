@@ -107,7 +107,9 @@ START_TEST(test_retrieve_cpu_model)
     char *cpu_model = (char *) malloc(255);
 
     retrieve_cpu_model(&m);
-    execute("sysctl machdep.cpu.brand_string | awk '{print $2\" \"$3\" \"$4\" \"$5\" \"$6\" \"$7}'", cpu_model);
+    execute("sysctl machdep.cpu.brand_string \
+        | awk '{for (i = 2; i < NF; i++) printf $i\" \"; print $NF; printf(\"\\n\")}'",
+        cpu_model);
     ck_assert_str_eq(m.cpu.model, cpu_model);
 
     free(cpu_model);
