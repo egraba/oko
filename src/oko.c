@@ -34,6 +34,9 @@ retrieve_serialnumber(machine *machine)
 			machine->serialnumber = (char *) CFStringGetCStringPtr(serialNumberAsCFString,
 				CFStringGetSystemEncoding());
 		}
+		else {
+			machine->serialnumber = strdup("__VM__");
+		}
 
 		IOObjectRelease(platform_expert);
 	}
