@@ -21,5 +21,8 @@ jobs:
     - name: Build tests
       run: make test
 
+    - name: Get machine info
+      run: sysctl -a
+
     - name: Run tests
       run: ./oko_test
