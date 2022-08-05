@@ -199,7 +199,6 @@ START_TEST(test_retrieve_memory_usage)
     usage u;
     char *mem_used = (char *) malloc(10);
     char *mem_free = (char *) malloc(10);
-    int upper_margin, lower_margin;
 
     retrieve_memory_usage(&u);
 
@@ -207,16 +206,7 @@ START_TEST(test_retrieve_memory_usage)
     ck_assert_uint_eq(atol(mem_used), u.memory.used);
 
     execute("sysctl vm.page_free_count | awk '{print $2*4096}'", mem_free);
-    /* 5% margin */
-    upper_margin = u.memory.free + 0.05 * u.memory.free;
-    lower_margin = u.memory.free - 0.05 * u.memory.free;
-    long mf = atol(mem_free);
-    if (mf < upper_margin) {
-        ck_assert_uint_lt(mf, upper_margin);
-    }
-    else {
-        ck_assert_uint_ge(mf, lower_margin);
-    }
+    assert_margin(u.memory.free, atol(mem_free), 0.05);
 
     free(mem_used);
     free(mem_free);
@@ -257,32 +247,13 @@ START_TEST(test_retrieve_network_usage)
     usage u;
     char *pckin = (char *) malloc(32);
     char *pckout = (char *) malloc(32);
-    int upper_margin, lower_margin;
     
     retrieve_network_usage(&u);
     execute("netstat -i | awk '{print $5}' | uniq | awk '{s+=$1} END {print s}'", pckin);
-    /* 1% margin */
-    upper_margin = u.network.pckin + 0.01 * u.network.pckin;
-    lower_margin = u.network.pckin - 0.01 * u.network.pckin;
-    long pin = atol(pckin);
-    if (pin < upper_margin) {
-        ck_assert_uint_lt(pin, upper_margin);
-    }
-    else {
-        ck_assert_uint_ge(pin, lower_margin);
-    }
+    assert_margin(u.network.pckin, atol(pckin), 0.01);
 
     execute("netstat -i | awk '{print $7}' | uniq | awk '{s+=$1} END {print s}'", pckout);
-    /* 1% margin */
-    upper_margin = u.network.pckout + 0.01 * u.network.pckout;
-    lower_margin = u.network.pckout - 0.01 * u.network.pckout;
-    long pout = atol(pckout);
-    if (pout < upper_margin) {
-        ck_assert_uint_lt(pout, upper_margin);
-    }
-    else {
-        ck_assert_uint_ge(pout, lower_margin);
-    }
+    assert_margin(u.network.pckout, atol(pckout), 0.01);
 
     free(pckin);
     free(pckout);

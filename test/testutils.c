@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <check.h>
+
 #include "testutils.h"
 
 #define TESTFILE_NAME "result_test.txt"
@@ -36,4 +38,19 @@ execute(const char* command, char* result)
     fclose(fp);
 
     return 0;
+}
+
+void
+assert_margin(long actual, long expected, float margin)
+{
+    int um, lm;
+
+    um = expected + margin * expected;
+    lm = expected - margin * expected;
+    if (actual < um) {
+        ck_assert_uint_lt(actual, um);
+    }
+    else {
+        ck_assert_uint_ge(actual, lm);
+    }
 }
