@@ -65,10 +65,8 @@ log_machine_info(machine *machine)
 	cJSON_SetValuestring(model, machine->model);
 	cJSON_SetValuestring(hostname, machine->hostname);
 	
-	ip = cJSON_CreateString(machine->network.ip);
-	cJSON_AddItemToObject(network, "ip", ip);
-	macaddress = cJSON_CreateString(machine->network.macaddress);
-	cJSON_AddItemToObject(network, "macaddress", macaddress);
+	cJSON_SetValuestring(ip, machine->network.ip);
+	cJSON_SetValuestring(macaddress, machine->network.macaddress);
 	
 	cJSON_SetValuestring(cpu_arch, machine->cpu.arch);
 	cJSON_SetValuestring(cpu_model, machine->cpu.model);
@@ -115,6 +113,14 @@ init_machine_usage_json(usage *usage)
 	cJSON_AddItemToObject(memory, "swapused", swapused);
 	swapfree = cJSON_CreateNumber(usage->memory.swapfree);
 	cJSON_AddItemToObject(memory, "swapfree", swapfree);
+
+	network = cJSON_CreateObject();
+	cJSON_AddItemToObject(json_usage, "network", network);
+
+	pckin = cJSON_CreateNumber(usage->network.pckin);
+	cJSON_AddItemToObject(network, "pckin", pckin);
+	pckout = cJSON_CreateNumber(usage->network.pckout);
+	cJSON_AddItemToObject(network, "pckout", pckout);
 }
 
 void
@@ -133,6 +139,9 @@ log_machine_usage(usage *usage)
 	cJSON_SetNumberValue(swaptotal, usage->memory.swaptotal);
 	cJSON_SetNumberValue(swapused, usage->memory.swapused);
 	cJSON_SetNumberValue(swapfree, usage->memory.swapfree);
+
+	cJSON_SetNumberValue(pckin, usage->network.pckin);
+	cJSON_SetNumberValue(pckout, usage->network.pckout);
 	
 	printf("[oko] %02d-%02d-%02d %02d:%02d:%02d -- USAGE -- %s\n",
 		tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900, tm.tm_hour, tm.tm_min, tm.tm_sec,
@@ -145,10 +154,11 @@ log_mode(int interval)
 	machine m;
 	usage u;
 	
+	collect_machine_info(&m);
+
 	init_machine_info_json(&m);
 	init_machine_usage_json(&u);
-
-	collect_machine_info(&m);
+	
 	log_machine_info(&m);
 	
 	for (;;) {

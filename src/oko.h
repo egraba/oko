@@ -82,6 +82,7 @@ int collect_machine_info(machine *machine);
 int retrieve_cpu_usage(usage *usage);
 int retrieve_memory_usage(usage *usage);
 int retrieve_memory_swapusage(usage *usage);
+int retrieve_network_usage(usage *usage);
 
 int collect_machine_usage(usage *usage);
 

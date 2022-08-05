@@ -37,6 +37,9 @@ cJSON *memory_free;
 cJSON *swaptotal;
 cJSON *swapused;
 cJSON *swapfree;
+cJSON *network;
+cJSON *pckin;
+cJSON *pckout;
 
 void init_machine_info_json(machine *machine);
 void init_machine_usage_json(usage *usage);

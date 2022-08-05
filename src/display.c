@@ -53,6 +53,8 @@ print_machine_usage(WINDOW *win, int line, int col, usage *usage)
 	mvwprintw(win, ++line, col, "memory.swaptotal: %lld", usage->memory.swaptotal);
 	mvwprintw(win, ++line, col, "memory.swapused: %lld", usage->memory.swapused);
 	mvwprintw(win, ++line, col, "memory.swapfree: %lld", usage->memory.swapfree);
+	mvwprintw(win, ++line, col, "network.pckin: %lld", usage->network.pckin);
+	mvwprintw(win, ++line, col, "network.pckout: %lld", usage->network.pckout);
 
 	wrefresh(win);
 }

@@ -3,6 +3,8 @@
 #include <mach/mach_error.h>
 #include <mach/mach_host.h>
 #include <netinet/in.h>
+#include <net/if.h>
+#include <net/route.h>
 #include <sys/sysctl.h>
 #include <math.h>
 #include <stdio.h>
@@ -390,7 +392,50 @@ retrieve_memory_swapusage(usage *usage)
 	return 0;
 }
 
+int
+retrieve_network_usage(usage *usage)
+{
+	int mib[6];
+	size_t len;
+	char *buf;
+	char *lim;
+	char *next;
+	struct if_msghdr *ifm;
+	
+	mib[0]	= CTL_NET;
+	mib[1]	= PF_ROUTE;
+	mib[2]	= 0;
+	mib[3]	= 0;
+	mib[4]	= NET_RT_IFLIST2;
+	mib[5]	= 0;
 
+	if (sysctl(mib, 6, NULL, &len, NULL, 0) < 0) {
+		return 1;
+	}
+
+	buf = malloc(len);
+	if (sysctl(mib, 6, buf, &len, NULL, 0) < 0) {
+		return 1;
+	}
+
+	usage->network.pckin = 0;
+	usage->network.pckout = 0;
+
+	lim = buf + len;
+	for (next = buf; next < lim; ) {
+		ifm = (struct if_msghdr *) next;
+		next += ifm->ifm_msglen;
+
+		if (ifm->ifm_type == RTM_IFINFO2) {
+			struct if_msghdr2 *if2m = (struct if_msghdr2 *) ifm;
+			
+			usage->network.pckin += if2m->ifm_data.ifi_ipackets;
+			usage->network.pckout += if2m->ifm_data.ifi_opackets;
+		}
+	}
+
+	return 0;
+}
 
 int
 collect_machine_usage(usage *usage)
@@ -429,6 +474,7 @@ collect_machine_usage(usage *usage)
 	/* network.dataout */
 	/* network.datainsec */
 	/* network.dataoutsec */
+	nerrors += retrieve_network_usage(usage);
     
 	return (nerrors);
 }

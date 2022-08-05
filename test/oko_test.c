@@ -252,6 +252,24 @@ START_TEST(test_retrieve_memory_swapusage)
 }
 END_TEST
 
+START_TEST(test_retrieve_network_usage)
+{
+    usage u;
+    char *pckin = (char *) malloc(32);
+    char *pckout = (char *) malloc(32);
+    
+    retrieve_network_usage(&u);
+    execute("netstat -i | awk '{print $5}' | uniq | awk '{s+=$1} END {print s}'", pckin);
+    ck_assert_str_eq(u.network.pckin, pckin);
+
+    execute("netstat -i | awk '{print $7}' | uniq | awk '{s+=$1} END {print s}'", pckout);
+    ck_assert_str_eq(u.network.pckout, pckout);
+
+    free(pckin);
+    free(pckout);
+}
+END_TEST
+
 Suite *
 oko_suite()
 {
@@ -281,6 +299,7 @@ oko_suite()
     tcase_add_test(tc_usage, test_retrieve_cpu_usage);
     tcase_add_test(tc_usage, test_retrieve_memory_usage);
     tcase_add_test(tc_usage, test_retrieve_memory_swapusage);
+    tcase_add_test(tc_usage, test_retrieve_network_usage);
     suite_add_tcase(s, tc_usage);
 
     return s;
