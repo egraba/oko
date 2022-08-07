@@ -35,14 +35,18 @@ retrieve_hardware_serialnumber(machine *machine)
 	sscanf (os_release, "%d.", &major_version); 
 	free(os_release);
 
-	/* Check whether macOS version is greater or equal to Monterey. */
+	/*
+	 * Check whether macOS version is greater or equal to Monterey.
+	 * The port name changes depending on the version.
+	 */
 	if (major_version >= 21) {
-		mp = kIOMainPortDefault;
+#define MACH_PORT kIOMainPortDefault
 	}
-	else {
-		mp = kIOMasterPortDefault;	
-	}
+#ifndef MACH_PORT	
+#define MACH_PORT kIOMasterPortDefault
+#endif
 
+	mp = MACH_PORT;
 	platform_expert = IOServiceGetMatchingService(mp, IOServiceMatching("IOPlatformExpertDevice"));
 
 	if (platform_expert) {
