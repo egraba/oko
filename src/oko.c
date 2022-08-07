@@ -47,7 +47,6 @@ retrieve_hardware_serialnumber(machine *machine)
 #else
 #define MACH_PORT kIOMasterPortDefault
 #endif
-	
 	mp = MACH_PORT;
 	platform_expert = IOServiceGetMatchingService(mp, IOServiceMatching("IOPlatformExpertDevice"));
 
