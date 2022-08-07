@@ -142,6 +142,23 @@ START_TEST(test_retrieve_memory_physmem)
 }
 END_TEST
 
+START_TEST(test_retrieve_memory_swaptotal)
+{
+    machine m;
+    char *swaptotal = (char *) malloc(10);
+    char *s = (char *) malloc(10);
+    
+    retrieve_memory_swaptotal(&m);
+    
+    execute("sysctl -a | grep swapusage | awk '{print $4}'", swaptotal);
+    sprintf(s, "%.2fM", m.memory.swaptotal / pow(1024, 2));
+    ck_assert_str_eq(s, swaptotal);
+    
+    free(swaptotal);
+    free(s);
+}
+END_TEST
+
 START_TEST(test_retrieve_os_name)
 {
     machine m;
@@ -205,16 +222,11 @@ END_TEST
 START_TEST(test_retrieve_memory_swapusage)
 {
     usage u;
-    char *swaptotal = (char *) malloc(10);
     char *swapused = (char *) malloc(10);
     char *swapfree = (char *) malloc(10);
     char *s = (char *) malloc(10);
     
     retrieve_memory_swap_usage(&u);
-    
-    execute("sysctl -a | grep swapusage | awk '{print $4}'", swaptotal);
-    sprintf(s, "%.2fM", u.memory.swaptotal / pow(1024, 2));
-    ck_assert_str_eq(s, swaptotal);
     
     execute("sysctl -a | grep swapusage | awk '{print $7}'", swapused);
     sprintf(s, "%.2fM", u.memory.swapused / pow(1024, 2));
@@ -224,7 +236,6 @@ START_TEST(test_retrieve_memory_swapusage)
     sprintf(s, "%.2fM", u.memory.swapfree / pow(1024, 2));
     ck_assert_str_eq(s, swapfree);
 
-    free(swaptotal);
     free(swapused);
     free(swapfree);
     free(s);
@@ -269,6 +280,7 @@ oko_suite()
     tcase_add_test(tc_machine, test_retrieve_cpu_model);
     tcase_add_test(tc_machine, test_retrieve_cpu_ncpus);
     tcase_add_test(tc_machine, test_retrieve_memory_physmem);
+    tcase_add_test(tc_machine, test_retrieve_memory_swaptotal);
     tcase_add_test(tc_machine, test_retrieve_os_name);
     tcase_add_test(tc_machine, test_retrieve_os_release);
     suite_add_tcase(s, tc_machine);
