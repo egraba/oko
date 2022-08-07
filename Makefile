@@ -1,9 +1,14 @@
 #
 # Makefile for macOS 
 #
+OSX_VERSION = $(shell sysctl kern.osrelease | awk '{split($$2, v, "."); print v[1]}')
 
 CC			= clang -g
-CFLAGS		= -Wall -Wextra
+ifneq ($(OSX_VERSION), 21)
+	CFLAGS = -Wall -Wextra -D OSX_BEFORE_MONTEREY
+else
+	CFLAGS	= -Wall -Wextra
+endif
 
 EXEC		= oko
 SRC			= $(wildcard src/*.c)

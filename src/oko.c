@@ -10,6 +10,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <Availability.h>
 
 #include <CoreFoundation/CoreFoundation.h>
 #include <IOKit/IOKitLib.h>
@@ -20,31 +21,14 @@ int
 retrieve_hardware_serialnumber(machine *machine)
 {
 	io_service_t platform_expert;
-	size_t len;
-	char *os_release;
-	int major_version;
 	mach_port_t mp;
 
-	if (sysctlbyname("kern.osrelease", NULL, &len, NULL, 0)) {
-		return 1;
-	}
-	os_release = malloc(len);
-	if (sysctlbyname("kern.osrelease", os_release, &len, NULL, 0)) {
-		return 1;
-	}
-	sscanf (os_release, "%d.", &major_version); 
-	free(os_release);
-
 	/*
-	 * Check whether macOS version is greater or equal to Monterey.
 	 * The port name changes depending on the version.
 	 */
-	if (major_version >= 21) {
-#define OSX_VERSION_MONTEREY
-	}
-#ifdef OSX_VERSION_MONTEREY
 #define MACH_PORT kIOMainPortDefault
-#else
+#ifdef OSX_BEFORE_MONTEREY
+#undef MACH_PORT
 #define MACH_PORT kIOMasterPortDefault
 #endif
 	mp = MACH_PORT;
