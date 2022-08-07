@@ -168,19 +168,6 @@ START_TEST(test_retrieve_os_release)
 }
 END_TEST
 
-START_TEST(test_retrieve_os_version)
-{
-    machine m;
-    char *os_version = (char *) malloc(255);
-    
-    retrieve_os_version(&m);
-    execute("uname -v", os_version);
-    ck_assert_str_eq(m.os.version, os_version);
-
-    free(os_version);
-}
-END_TEST
-
 START_TEST(test_retrieve_cpu_usage)
 {
     usage u;
@@ -284,7 +271,6 @@ oko_suite()
     tcase_add_test(tc_machine, test_retrieve_physmem);
     tcase_add_test(tc_machine, test_retrieve_os_name);
     tcase_add_test(tc_machine, test_retrieve_os_release);
-    tcase_add_test(tc_machine, test_retrieve_os_version);
     suite_add_tcase(s, tc_machine);
 
     tc_usage = tcase_create("Usage");

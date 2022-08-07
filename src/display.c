@@ -32,7 +32,6 @@ print_machine_info(WINDOW *win, int line, int col, machine *machine)
 	mvwprintw(win, ++line, col, "memory.physmem: %lld", machine->memory.physmem);
 	mvwprintw(win, ++line, col, "os.name: %s", machine->os.name);
 	mvwprintw(win, ++line, col, "os.release %s", machine->os.release);
-	mvwprintw(win, ++line, col, "os.version %s", machine->os.version);
 
 	wrefresh(win);
 }

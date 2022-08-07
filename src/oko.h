@@ -23,7 +23,6 @@ typedef struct {
 	struct {
 		char *name;
 		char *release;
-		char *version;
 	} os;
 } machine;
 
@@ -75,7 +74,6 @@ int retrieve_ncpus(machine *machine);
 int retrieve_physmem(machine *machine);
 int retrieve_os_name(machine *machine);
 int retrieve_os_release(machine *machine);
-int retrieve_os_version(machine *machine);
 
 int collect_machine_info(machine *machine);
 

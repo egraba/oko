@@ -273,22 +273,6 @@ retrieve_os_release(machine *machine)
 }
 
 int
-retrieve_os_version(machine *machine)
-{
-	size_t len;
-    
-	if (sysctlbyname("kern.version", NULL, &len, NULL, 0) != 0) {
-		return 1;
-	}
-	machine->os.version = malloc(len);
-	if (sysctlbyname("kern.version", machine->os.version, &len, NULL, 0)) {
-		return 1;
-	}
-    
-	return 0;
-}
-
-int
 collect_machine_info(machine *machine)
 {
 	int nerrors = 0;
@@ -328,9 +312,6 @@ collect_machine_info(machine *machine)
     
 	/* os.release */
 	nerrors += retrieve_os_release(machine);
-    
-	/* os.version */
-	nerrors += retrieve_os_version(machine);
     
 	return (nerrors);
 }

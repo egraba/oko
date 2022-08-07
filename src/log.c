@@ -50,8 +50,6 @@ init_machine_info_json(machine *machine)
 	cJSON_AddItemToObject(os, "name", name);
 	release = cJSON_CreateString(machine->os.release);
 	cJSON_AddItemToObject(os, "release", release);
-	version = cJSON_CreateString(machine->os.version);
-	cJSON_AddItemToObject(os, "version", version);
 }
 
 void
@@ -76,7 +74,6 @@ log_machine_info(machine *machine)
 	
 	cJSON_SetValuestring(name, machine->os.name);
 	cJSON_SetValuestring(release, machine->os.release);
-	cJSON_SetValuestring(version, machine->os.version);
 	
 	printf("[oko] %02d-%02d-%02d %02d:%02d:%02d -- MACHINE -- %s\n",
 		tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900, tm.tm_hour, tm.tm_min, tm.tm_sec,
