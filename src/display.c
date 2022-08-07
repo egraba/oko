@@ -6,6 +6,24 @@
 #include "display.h"
 #include "utils.h"
 
+static char *
+human_readable(long memory_value)
+{
+	char *buf;
+	float mv;
+	char unit[5][2] = {"B", "KB", "MB", "GB", "TB"};
+	int i = 0;
+
+	mv = memory_value;
+	for (i = 0; mv >= 1024; i++) {
+		mv /= 1024;
+	}
+	buf = malloc(10);
+	sprintf(buf, "%.2f%.2s", mv, unit[i]);
+
+	return buf;
+}
+
 void
 print_instructions(WINDOW *win, int line, int col)
 {
@@ -26,8 +44,8 @@ print_machine_info(WINDOW *win, int line, int col, machine *machine)
 		machine->network.hostname, machine->network.ip, machine->network.macaddress);
 	mvwprintw(win, ++line, col, "cpu arch: %s, model: %s, ncpus: %d",
 		machine->cpu.arch, machine->cpu.model, machine->cpu.ncpus);
-	mvwprintw(win, ++line, col, "memory physmem: %lld, swaptotal: %lld",
-		machine->memory.physmem, machine->memory.swaptotal);
+	mvwprintw(win, ++line, col, "memory physmem: %s, swaptotal: %s",
+		human_readable(machine->memory.physmem), human_readable(machine->memory.swaptotal));
 	mvwprintw(win, ++line, col, "os name: %s, release %s",
 		machine->os.name, machine->os.release);
 	
@@ -41,12 +59,12 @@ print_machine_usage(WINDOW *win, int line, int col, usage *usage)
 	mvwprintw(win, line, col, "Usage");
 	wattroff(win, A_BOLD);
 
-	mvwprintw(win, ++line, col, "cpu user: %.2f %%, system: %.2f %%, idle: %.2f %%, nice: %.2f %%",
+	mvwprintw(win, ++line, col, "cpu user: %.2f%%, system: %.2f%%, idle: %.2f%%, nice: %.2f%%",
 		usage->cpu.user, usage->cpu.system, usage->cpu.idle, usage->cpu.nice);
-	mvwprintw(win, ++line, col, "memory used: %lld, free: %lld",
-		usage->memory.used, usage->memory.free);
-	mvwprintw(win, ++line, col, "memory swapused: %lld, swapfree: %lld",
-		usage->memory.swapused, usage->memory.swapfree);
+	mvwprintw(win, ++line, col, "memory used: %s, free: %s",
+		human_readable(usage->memory.used), human_readable(usage->memory.free));
+	mvwprintw(win, ++line, col, "memory swapused: %s, swapfree: %s",
+		human_readable(usage->memory.swapused), human_readable(usage->memory.swapfree));
 	mvwprintw(win, ++line, col, "network pckin: %lld, pckout: %lld",
 		usage->network.pckin, usage->network.pckout);
 
