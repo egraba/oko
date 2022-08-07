@@ -461,6 +461,8 @@ retrieve_network_usage(usage *usage)
 		}
 	}
 
+	free(buf);
+
 	return 0;
 }
 
