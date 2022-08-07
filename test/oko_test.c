@@ -212,9 +212,7 @@ START_TEST(test_retrieve_memory_usage)
     ck_assert_uint_eq(atol(mem_used), u.memory.used);
 
     execute("sysctl vm.page_free_count | awk '{print $2*4096}'", mem_free);
-    assert_margin(u.memory.free, atol(mem_free), 0.05);
-    printf("%lld\n", u.memory.free);
-    printf("%ld\n", atol(mem_free));
+    assert_margin(u.memory.free, atoll(mem_free), 0.05);
 
     free(mem_used);
     free(mem_free);
