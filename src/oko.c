@@ -17,7 +17,7 @@
 #include "oko.h"
 
 int
-retrieve_serialnumber(machine *machine)
+retrieve_hardware_serialnumber(machine *machine)
 {
 	io_service_t platform_expert;
 	size_t len;
@@ -52,7 +52,7 @@ retrieve_serialnumber(machine *machine)
 			kCFAllocatorDefault, 0);
 		
 		if (serialNumberAsCFString) {
-			machine->serialnumber = (char *) CFStringGetCStringPtr(serialNumberAsCFString,
+			machine->hardware.serialnumber = (char *) CFStringGetCStringPtr(serialNumberAsCFString,
 				CFStringGetSystemEncoding());
 		}
 		else {
@@ -69,15 +69,15 @@ retrieve_serialnumber(machine *machine)
 }
 
 int
-retrieve_type(machine *machine)
+retrieve_hardware_type(machine *machine)
 {
 	size_t len;
     
 	if (sysctlbyname("hw.targettype", NULL, &len, NULL, 0)) {
 		return 1;
 	}
-	machine->type = malloc(len);
-	if (sysctlbyname("hw.targettype", machine->type, &len, NULL, 0)) {
+	machine->hardware.type = malloc(len);
+	if (sysctlbyname("hw.targettype", machine->hardware.type, &len, NULL, 0)) {
 		return 1;
 	}
     
@@ -85,15 +85,15 @@ retrieve_type(machine *machine)
 }
 
 int
-retrieve_model(machine *machine)
+retrieve_hardware_model(machine *machine)
 {
 	size_t len;
     
 	if (sysctlbyname("hw.model", NULL, &len, NULL, 0)) {
 		return 1;
 	}
-	machine->model = malloc(len);
-	if (sysctlbyname("hw.model", machine->model, &len, NULL, 0)) {
+	machine->hardware.model = malloc(len);
+	if (sysctlbyname("hw.model", machine->hardware.model, &len, NULL, 0)) {
 		return 1;
 	}
     
@@ -101,15 +101,15 @@ retrieve_model(machine *machine)
 }
 
 int
-retrieve_hostname(machine *machine)
+retrieve_network_hostname(machine *machine)
 {
 	size_t len;
     
 	if (sysctlbyname("kern.hostname", NULL, &len, NULL, 0)) {
 		return 1;
 	}
-	machine->hostname = malloc(len);
-	if (sysctlbyname("kern.hostname", machine->hostname, &len, NULL, 0)) {
+	machine->network.hostname = malloc(len);
+	if (sysctlbyname("kern.hostname", machine->network.hostname, &len, NULL, 0)) {
 		return 1;
 	}
     
@@ -117,7 +117,7 @@ retrieve_hostname(machine *machine)
 }
 
 int
-retrieve_ip(machine *machine)
+retrieve_network_ip(machine *machine)
 {
 	struct ifaddrs *ifa;
 	struct ifaddrs *ifs;
@@ -146,7 +146,7 @@ retrieve_ip(machine *machine)
 }
 
 int
-retrieve_macaddress(machine *machine)
+retrieve_network_macaddress(machine *machine)
 {
 	struct ifaddrs *ifa;
 	struct ifaddrs *ifs;
@@ -215,7 +215,7 @@ retrieve_cpu_model(machine *machine)
 }
 
 int
-retrieve_ncpus(machine *machine)
+retrieve_cpu_ncpus(machine *machine)
 {
 	size_t len;
     
@@ -228,7 +228,7 @@ retrieve_ncpus(machine *machine)
 }
 
 int
-retrieve_physmem(machine *machine)
+retrieve_memory_physmem(machine *machine)
 {
 	size_t len;
     
@@ -277,41 +277,22 @@ collect_machine_info(machine *machine)
 {
 	int nerrors = 0;
     
-	/* serialnumber */
-	nerrors += retrieve_serialnumber(machine);
+	nerrors += retrieve_hardware_serialnumber(machine);
+    nerrors += retrieve_hardware_type(machine);
+    nerrors += retrieve_hardware_model(machine);
     
-	/* type */
-	nerrors += retrieve_type(machine);
+	nerrors += retrieve_network_hostname(machine);
+    nerrors += retrieve_network_ip(machine);
+    nerrors += retrieve_network_macaddress(machine);
     
-	/* model */
-	nerrors += retrieve_model(machine);
-    
-	/* hostname */
-	nerrors += retrieve_hostname(machine);
-    
-	/* network.ip */
-	nerrors += retrieve_ip(machine);
-    
-	/* network.macaddress */
-	nerrors += retrieve_macaddress(machine);
-    
-	/* cpu.arch */
 	nerrors += retrieve_cpu_arch(machine);
+    nerrors += retrieve_cpu_model(machine);
+    nerrors += retrieve_cpu_ncpus(machine);
     
-	/* cpu.model */
-	nerrors += retrieve_cpu_model(machine);
+	nerrors += retrieve_memory_physmem(machine);
     
-	/* cpu.ncpus */
-	nerrors += retrieve_ncpus(machine);
-    
-	/* memory.physmem */
-	nerrors += retrieve_physmem(machine);
-    
-	/* os.name */
 	nerrors += retrieve_os_name(machine);
-    
-	/* os.release */
-	nerrors += retrieve_os_release(machine);
+    nerrors += retrieve_os_release(machine);
     
 	return (nerrors);
 }
@@ -382,7 +363,7 @@ retrieve_memory_usage(usage *usage)
 }
 
 int
-retrieve_memory_swapusage(usage *usage)
+retrieve_memory_swap_usage(usage *usage)
 {
 	size_t len;
 	struct xsw_usage xsu;
@@ -465,7 +446,7 @@ collect_machine_usage(usage *usage)
 	/* memory.swaptotal */
 	/* memory.swapused */
 	/* memory.swapfree */
-	nerrors += retrieve_memory_swapusage(usage);
+	nerrors += retrieve_memory_swap_usage(usage);
     
 	/* io.pckin */
 	/* io.pckout */

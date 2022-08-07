@@ -10,64 +10,64 @@
 
 #include "oko.h"
  
-START_TEST(test_retrieve_serial_number)
+START_TEST(test_retrieve_hardware_serialnumber)
 {
     machine m;
     char *serialnumber = (char *) malloc(12);
     
-    retrieve_serialnumber(&m);
+    retrieve_hardware_serialnumber(&m);
     execute("system_profiler SPHardwareDataType | grep Serial | awk '{print $4}'", serialnumber);
-    ck_assert_str_eq(m.serialnumber, serialnumber);
+    ck_assert_str_eq(m.hardware.serialnumber, serialnumber);
 
     free(serialnumber);
 }
 END_TEST
 
-START_TEST(test_retrieve_type)
+START_TEST(test_retrieve_hardware_type)
 {
     machine m;
     char *type = (char *) malloc(10);
     
-    retrieve_type(&m);
+    retrieve_hardware_type(&m);
     execute("sysctl hw.targettype | awk '{print $2}'", type);    
-    ck_assert_str_eq(m.type, type);
+    ck_assert_str_eq(m.hardware.type, type);
 
     free(type);
 }
 END_TEST
 
-START_TEST(test_retrieve_model)
+START_TEST(test_retrieve_hardware_model)
 {
     machine m;
     char *model = (char *) malloc(100);
 
-    retrieve_model(&m);
+    retrieve_hardware_model(&m);
     execute("system_profiler SPHardwareDataType | grep 'Model Identifier' | awk '{print $3}'", model);
-    ck_assert_str_eq(m.model, model);
+    ck_assert_str_eq(m.hardware.model, model);
 
     free(model);
 }
 END_TEST
 
-START_TEST(test_retrieve_hostname)
+START_TEST(test_retrieve_network_hostname)
 {
     machine m;
     char *hostname = (char *) malloc(253);
     
-    retrieve_hostname(&m);
+    retrieve_network_hostname(&m);
     execute("hostname", hostname);
-    ck_assert_str_eq(m.hostname, hostname);
+    ck_assert_str_eq(m.network.hostname, hostname);
 
     free(hostname);
 }
 END_TEST
 
-START_TEST(test_retrieve_ip)
+START_TEST(test_retrieve_network_ip)
 {
     machine m;
     char *ip = (char *) malloc(16);
 
-    retrieve_ip(&m);
+    retrieve_network_ip(&m);
     execute("ifconfig | grep \"inet \" | grep -Fv 127.0.0.1 | awk '{print $2}'", ip);
     ck_assert_str_eq(m.network.ip, ip);
 
@@ -75,12 +75,12 @@ START_TEST(test_retrieve_ip)
 }
 END_TEST
 
-START_TEST(test_retrieve_macaddress)
+START_TEST(test_retrieve_network_macaddress)
 {
     machine m;
     char *macaddress = (char *) malloc(18);
 
-    retrieve_macaddress(&m);
+    retrieve_network_macaddress(&m);
     execute("ifconfig en0 | grep \"ether \" | awk '{print $2}'", macaddress);
     ck_assert_str_eq(m.network.macaddress, macaddress);
 
@@ -116,12 +116,12 @@ START_TEST(test_retrieve_cpu_model)
 }
 END_TEST
 
-START_TEST(test_retrieve_ncpus)
+START_TEST(test_retrieve_cpu_ncpus)
 {
     machine m;
     char *ncpus = (char *) malloc(3);
 
-    retrieve_ncpus(&m);
+    retrieve_cpu_ncpus(&m);
     execute("sysctl hw.ncpu | awk '{print $2}'", ncpus);
     ck_assert_int_eq(m.cpu.ncpus, atoi(ncpus));
 
@@ -129,12 +129,12 @@ START_TEST(test_retrieve_ncpus)
 }
 END_TEST
 
-START_TEST(test_retrieve_physmem)
+START_TEST(test_retrieve_memory_physmem)
 {
     machine m;
     char *physmem = (char *) malloc(255);
     
-    retrieve_physmem(&m);
+    retrieve_memory_physmem(&m);
     execute("sysctl hw.memsize | awk '{print $2}'", physmem);
     ck_assert_int_eq(m.memory.physmem, atol(physmem));
 
@@ -210,7 +210,7 @@ START_TEST(test_retrieve_memory_swapusage)
     char *swapfree = (char *) malloc(10);
     char *s = (char *) malloc(10);
     
-    retrieve_memory_swapusage(&u);
+    retrieve_memory_swap_usage(&u);
     
     execute("sysctl -a | grep swapusage | awk '{print $4}'", swaptotal);
     sprintf(s, "%.2fM", u.memory.swaptotal / pow(1024, 2));
@@ -259,16 +259,16 @@ oko_suite()
     s = suite_create("oko");
     
     tc_machine = tcase_create("Machine");
-    tcase_add_test(tc_machine, test_retrieve_serial_number);
-    tcase_add_test(tc_machine, test_retrieve_type);
-    tcase_add_test(tc_machine, test_retrieve_model);
-    tcase_add_test(tc_machine, test_retrieve_ip);
-    tcase_add_test(tc_machine, test_retrieve_macaddress);
-    tcase_add_test(tc_machine, test_retrieve_hostname);
+    tcase_add_test(tc_machine, test_retrieve_hardware_serialnumber);
+    tcase_add_test(tc_machine, test_retrieve_hardware_type);
+    tcase_add_test(tc_machine, test_retrieve_hardware_model);
+    tcase_add_test(tc_machine, test_retrieve_network_hostname);
+    tcase_add_test(tc_machine, test_retrieve_network_ip);
+    tcase_add_test(tc_machine, test_retrieve_network_macaddress);
     tcase_add_test(tc_machine, test_retrieve_cpu_arch);
     tcase_add_test(tc_machine, test_retrieve_cpu_model);
-    tcase_add_test(tc_machine, test_retrieve_ncpus);
-    tcase_add_test(tc_machine, test_retrieve_physmem);
+    tcase_add_test(tc_machine, test_retrieve_cpu_ncpus);
+    tcase_add_test(tc_machine, test_retrieve_memory_physmem);
     tcase_add_test(tc_machine, test_retrieve_os_name);
     tcase_add_test(tc_machine, test_retrieve_os_release);
     suite_add_tcase(s, tc_machine);

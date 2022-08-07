@@ -20,10 +20,10 @@ print_machine_info(WINDOW *win, int line, int col, machine *machine)
 	mvwprintw(win, line, col, "Machine");
 	wattroff(win, A_BOLD);
 
-	mvwprintw(win, ++line, col, "serialnumber: %s", machine->serialnumber);
-	mvwprintw(win, ++line, col, "type: %s", machine->type);
-	mvwprintw(win, ++line, col, "model: %s", machine->model);
-	mvwprintw(win, ++line, col, "hostname: %s", machine->hostname);
+	mvwprintw(win, ++line, col, "hardware.serialnumber: %s", machine->hardware.serialnumber);
+	mvwprintw(win, ++line, col, "hardware.type: %s", machine->hardware.type);
+	mvwprintw(win, ++line, col, "hardware.model: %s", machine->hardware.model);
+	mvwprintw(win, ++line, col, "network.hostname: %s", machine->network.hostname);
 	mvwprintw(win, ++line, col, "network.ip: %s", machine->network.ip);
 	mvwprintw(win, ++line, col, "network.macaddress: %s", machine->network.macaddress);
 	mvwprintw(win, ++line, col, "cpu.arch: %s", machine->cpu.arch);

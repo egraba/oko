@@ -10,13 +10,13 @@ init_machine_info_json(machine *machine)
 {
 	json_machine = cJSON_CreateObject();
 	
-	serialnumber = cJSON_CreateString(machine->serialnumber);
+	serialnumber = cJSON_CreateString(machine->hardware.serialnumber);
 	cJSON_AddItemToObject(json_machine, "serialnumber", serialnumber);
-	type = cJSON_CreateString(machine->type);
+	type = cJSON_CreateString(machine->hardware.type);
 	cJSON_AddItemToObject(json_machine, "type", type);
-	model = cJSON_CreateString(machine->model);
+	model = cJSON_CreateString(machine->hardware.model);
 	cJSON_AddItemToObject(json_machine, "model", model);
-	hostname = cJSON_CreateString(machine->hostname);
+	hostname = cJSON_CreateString(machine->network.hostname);
 	cJSON_AddItemToObject(json_machine, "hostname", hostname);
 	
 	network = cJSON_CreateObject();
@@ -58,11 +58,11 @@ log_machine_info(machine *machine)
 	time_t t = time(NULL);
 	struct tm tm = *localtime(&t);
 
-	cJSON_SetValuestring(serialnumber, machine->serialnumber);
-	cJSON_SetValuestring(type, machine->type);
-	cJSON_SetValuestring(model, machine->model);
-	cJSON_SetValuestring(hostname, machine->hostname);
+	cJSON_SetValuestring(serialnumber, machine->hardware.serialnumber);
+	cJSON_SetValuestring(type, machine->hardware.type);
+	cJSON_SetValuestring(model, machine->hardware.model);
 	
+	cJSON_SetValuestring(hostname, machine->network.hostname);
 	cJSON_SetValuestring(ip, machine->network.ip);
 	cJSON_SetValuestring(macaddress, machine->network.macaddress);
 	

@@ -4,11 +4,13 @@
 #include <stdint.h>
 
 typedef struct {
-	char *serialnumber;
-	char *type;
-	char *model;
-	char *hostname;
 	struct {
+		char *serialnumber;
+		char *type;
+		char *model;
+	} hardware;
+	struct {
+		char *hostname;
 		char *ip;
 		char *macaddress;
 	} network;
@@ -62,16 +64,16 @@ typedef struct {
 	} network;
 } usage;
 
-int retrieve_serialnumber(machine *machine);
-int retrieve_type(machine *machine);
-int retrieve_model(machine *machine);
-int retrieve_hostname(machine *machine);
-int retrieve_ip(machine *machine);
-int retrieve_macaddress(machine *machine);
+int retrieve_hardware_serialnumber(machine *machine);
+int retrieve_hardware_type(machine *machine);
+int retrieve_hardware_model(machine *machine);
+int retrieve_network_hostname(machine *machine);
+int retrieve_network_ip(machine *machine);
+int retrieve_network_macaddress(machine *machine);
 int retrieve_cpu_arch(machine *machine);
 int retrieve_cpu_model(machine *machine);
-int retrieve_ncpus(machine *machine);
-int retrieve_physmem(machine *machine);
+int retrieve_cpu_ncpus(machine *machine);
+int retrieve_memory_physmem(machine *machine);
 int retrieve_os_name(machine *machine);
 int retrieve_os_release(machine *machine);
 
@@ -79,7 +81,7 @@ int collect_machine_info(machine *machine);
 
 int retrieve_cpu_usage(usage *usage);
 int retrieve_memory_usage(usage *usage);
-int retrieve_memory_swapusage(usage *usage);
+int retrieve_memory_swap_usage(usage *usage);
 int retrieve_network_usage(usage *usage);
 
 int collect_machine_usage(usage *usage);
