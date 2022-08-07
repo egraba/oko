@@ -20,19 +20,17 @@ print_machine_info(WINDOW *win, int line, int col, machine *machine)
 	mvwprintw(win, line, col, "Machine");
 	wattroff(win, A_BOLD);
 
-	mvwprintw(win, ++line, col, "hardware.serialnumber: %s", machine->hardware.serialnumber);
-	mvwprintw(win, ++line, col, "hardware.type: %s", machine->hardware.type);
-	mvwprintw(win, ++line, col, "hardware.model: %s", machine->hardware.model);
-	mvwprintw(win, ++line, col, "network.hostname: %s", machine->network.hostname);
-	mvwprintw(win, ++line, col, "network.ip: %s", machine->network.ip);
-	mvwprintw(win, ++line, col, "network.macaddress: %s", machine->network.macaddress);
-	mvwprintw(win, ++line, col, "cpu.arch: %s", machine->cpu.arch);
-	mvwprintw(win, ++line, col, "cpu.model: %s", machine->cpu.model);
-	mvwprintw(win, ++line, col, "cpu.ncpus: %d", machine->cpu.ncpus);
-	mvwprintw(win, ++line, col, "memory.physmem: %lld", machine->memory.physmem);
-	mvwprintw(win, ++line, col, "os.name: %s", machine->os.name);
-	mvwprintw(win, ++line, col, "os.release %s", machine->os.release);
-
+	mvwprintw(win, ++line, col, "hardware serialnumber: %s, type: %s, model: %s",
+		machine->hardware.serialnumber, machine->hardware.type, machine->hardware.model);
+	mvwprintw(win, ++line, col, "network hostname: %s, ip: %s, macaddress: %s",
+		machine->network.hostname, machine->network.ip, machine->network.macaddress);
+	mvwprintw(win, ++line, col, "cpu arch: %s, model: %s, ncpus: %d",
+		machine->cpu.arch, machine->cpu.model, machine->cpu.ncpus);
+	mvwprintw(win, ++line, col, "memory physmem: %lld",
+		machine->memory.physmem);
+	mvwprintw(win, ++line, col, "os name: %s, release %s",
+		machine->os.name, machine->os.release);
+	
 	wrefresh(win);
 }
 
@@ -43,17 +41,14 @@ print_machine_usage(WINDOW *win, int line, int col, usage *usage)
 	mvwprintw(win, line, col, "Usage");
 	wattroff(win, A_BOLD);
 
-	mvwprintw(win, ++line, col, "cpu.user: %.2f %%", usage->cpu.user);
-	mvwprintw(win, ++line, col, "cpu.system: %.2f %%", usage->cpu.system);
-	mvwprintw(win, ++line, col, "cpu.idle: %.2f %%", usage->cpu.idle);
-	mvwprintw(win, ++line, col, "cpu.nice: %.2f %%", usage->cpu.nice);
-	mvwprintw(win, ++line, col, "memory.used: %lld", usage->memory.used);
-	mvwprintw(win, ++line, col, "memory.free: %lld", usage->memory.free);
-	mvwprintw(win, ++line, col, "memory.swaptotal: %lld", usage->memory.swaptotal);
-	mvwprintw(win, ++line, col, "memory.swapused: %lld", usage->memory.swapused);
-	mvwprintw(win, ++line, col, "memory.swapfree: %lld", usage->memory.swapfree);
-	mvwprintw(win, ++line, col, "network.pckin: %lld", usage->network.pckin);
-	mvwprintw(win, ++line, col, "network.pckout: %lld", usage->network.pckout);
+	mvwprintw(win, ++line, col, "cpu user: %.2f %%, system: %.2f %%, idle: %.2f %%, nice: %.2f %%",
+		usage->cpu.user, usage->cpu.system, usage->cpu.idle, usage->cpu.nice);
+	mvwprintw(win, ++line, col, "memory used: %lld, free: %lld",
+		usage->memory.used, usage->memory.free);
+	mvwprintw(win, ++line, col, "memory swaptotal: %lld, swapused: %lld, swapfree: %lld",
+		usage->memory.swaptotal, usage->memory.swapused, usage->memory.swapfree);
+	mvwprintw(win, ++line, col, "network pckin: %lld, pckout: %lld",
+		usage->network.pckin, usage->network.pckout);
 
 	wrefresh(win);
 }
@@ -89,17 +84,17 @@ display_mode(int interval)
 
 	initscr();
 	instw = subwin(stdscr, 1, COLS, 0, 0);  
-	topw = subwin(stdscr, LINES / 2 - 1, COLS, 1, 0);
-	bottomw = subwin(stdscr, LINES / 2, COLS, LINES / 2, 0);
+	topw = subwin(stdscr, 7, COLS, 1, 0);
+	bottomw = subwin(stdscr, LINES - 8, COLS, 8, 0);
 	box(topw, ACS_VLINE, ACS_HLINE);
 	
 	print_instructions(instw, 0, 0);
 
 	collect_machine_info(&m);
-	print_machine_info(topw, 1, 1, &m);
+	print_machine_info(topw, 0, 1, &m);
 
 	udd.win = bottomw;
-	udd.line = 1;
+	udd.line = 0;
 	udd.col = 1;
 	udd.usage = &u;
 	udd.interval = interval;
