@@ -61,9 +61,8 @@ print_machine_usage(WINDOW *win, int line, int col, usage *usage)
 
 	mvwprintw(win, ++line, col, "cpu user: %.2f%%, system: %.2f%%, idle: %.2f%%, nice: %.2f%%",
 		usage->cpu.user, usage->cpu.system, usage->cpu.idle, usage->cpu.nice);
-	mvwprintw(win, ++line, col, "memory used: %s, free: %s",
-		human_readable(usage->memory.used), human_readable(usage->memory.free));
-	mvwprintw(win, ++line, col, "memory swapused: %s, swapfree: %s",
+	mvwprintw(win, ++line, col, "memory used: %s, free: %s, swapused: %s, swapfree: %s",
+		human_readable(usage->memory.used), human_readable(usage->memory.free),
 		human_readable(usage->memory.swapused), human_readable(usage->memory.swapfree));
 	mvwprintw(win, ++line, col, "network pckin: %lld, pckout: %lld",
 		usage->network.pckin, usage->network.pckout);
