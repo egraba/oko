@@ -21,6 +21,7 @@ typedef struct {
 	} cpu;
 	struct {
 		int64_t physmem;
+		u_int64_t swaptotal;
 	} memory;
 	struct {
 		char *name;
@@ -38,7 +39,6 @@ typedef struct {
 	struct {
 		int64_t used;
 		int64_t free;
-		u_int64_t swaptotal;
 		u_int64_t swapused;
 		u_int64_t swapfree;
 	} memory;
@@ -74,6 +74,7 @@ int retrieve_cpu_arch(machine *machine);
 int retrieve_cpu_model(machine *machine);
 int retrieve_cpu_ncpus(machine *machine);
 int retrieve_memory_physmem(machine *machine);
+int retrieve_memory_swaptotal(machine *machine);
 int retrieve_os_name(machine *machine);
 int retrieve_os_release(machine *machine);
 

@@ -43,6 +43,9 @@ init_machine_info_json(machine *machine)
 	physmem = cJSON_CreateNumber(machine->memory.physmem);
 	cJSON_AddItemToObject(memory, "physmem", physmem);
 
+	swaptotal = cJSON_CreateNumber(machine->memory.swaptotal);
+	cJSON_AddItemToObject(memory, "swaptotal", swaptotal);
+
 	os = cJSON_CreateObject();
 	cJSON_AddItemToObject(json_machine, "os", os);
 	
@@ -71,6 +74,7 @@ log_machine_info(machine *machine)
 	cJSON_SetNumberValue(ncpus, machine->cpu.ncpus);
 	
 	cJSON_SetNumberValue(physmem, machine->memory.physmem);
+	cJSON_SetNumberValue(swaptotal, machine->memory.swaptotal);
 	
 	cJSON_SetValuestring(name, machine->os.name);
 	cJSON_SetValuestring(release, machine->os.release);
@@ -104,8 +108,6 @@ init_machine_usage_json(usage *usage)
 	cJSON_AddItemToObject(memory, "used", memory_used);
 	memory_free = cJSON_CreateNumber(usage->memory.free);
 	cJSON_AddItemToObject(memory, "free", memory_free);
-	swaptotal = cJSON_CreateNumber(usage->memory.swaptotal);
-	cJSON_AddItemToObject(memory, "swaptotal", swaptotal);
 	swapused = cJSON_CreateNumber(usage->memory.swapused);
 	cJSON_AddItemToObject(memory, "swapused", swapused);
 	swapfree = cJSON_CreateNumber(usage->memory.swapfree);
@@ -133,7 +135,6 @@ log_machine_usage(usage *usage)
 	
 	cJSON_SetNumberValue(memory_used, usage->memory.used);
 	cJSON_SetNumberValue(memory_free, usage->memory.free);
-	cJSON_SetNumberValue(swaptotal, usage->memory.swaptotal);
 	cJSON_SetNumberValue(swapused, usage->memory.swapused);
 	cJSON_SetNumberValue(swapfree, usage->memory.swapfree);
 

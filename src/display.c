@@ -26,8 +26,8 @@ print_machine_info(WINDOW *win, int line, int col, machine *machine)
 		machine->network.hostname, machine->network.ip, machine->network.macaddress);
 	mvwprintw(win, ++line, col, "cpu arch: %s, model: %s, ncpus: %d",
 		machine->cpu.arch, machine->cpu.model, machine->cpu.ncpus);
-	mvwprintw(win, ++line, col, "memory physmem: %lld",
-		machine->memory.physmem);
+	mvwprintw(win, ++line, col, "memory physmem: %lld, swaptotal: %lld",
+		machine->memory.physmem, machine->memory.swaptotal);
 	mvwprintw(win, ++line, col, "os name: %s, release %s",
 		machine->os.name, machine->os.release);
 	
@@ -45,8 +45,8 @@ print_machine_usage(WINDOW *win, int line, int col, usage *usage)
 		usage->cpu.user, usage->cpu.system, usage->cpu.idle, usage->cpu.nice);
 	mvwprintw(win, ++line, col, "memory used: %lld, free: %lld",
 		usage->memory.used, usage->memory.free);
-	mvwprintw(win, ++line, col, "memory swaptotal: %lld, swapused: %lld, swapfree: %lld",
-		usage->memory.swaptotal, usage->memory.swapused, usage->memory.swapfree);
+	mvwprintw(win, ++line, col, "memory swapused: %lld, swapfree: %lld",
+		usage->memory.swapused, usage->memory.swapfree);
 	mvwprintw(win, ++line, col, "network pckin: %lld, pckout: %lld",
 		usage->network.pckin, usage->network.pckout);
 

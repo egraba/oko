@@ -241,6 +241,23 @@ retrieve_memory_physmem(machine *machine)
 }
 
 int
+retrieve_memory_swaptotal(machine *machine)
+{
+	size_t len;
+	struct xsw_usage xsu;
+    
+	if (sysctlbyname("vm.swapusage", NULL, &len, NULL, 0)) {
+		return 1;
+	}
+	if (sysctlbyname("vm.swapusage", &xsu, &len, NULL, 0)) {
+		return 1;
+	}
+	machine->memory.swaptotal = xsu.xsu_total;
+    
+	return 0;
+}
+
+int
 retrieve_os_name(machine *machine)
 {
 	size_t len;
@@ -374,7 +391,6 @@ retrieve_memory_swap_usage(usage *usage)
 	if (sysctlbyname("vm.swapusage", &xsu, &len, NULL, 0)) {
 		return 1;
 	}
-	usage->memory.swaptotal = xsu.xsu_total;
 	usage->memory.swapused = xsu.xsu_used;
 	usage->memory.swapfree = xsu.xsu_avail;
     
