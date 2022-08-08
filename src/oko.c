@@ -209,7 +209,9 @@ retrieve_cpu_ncpus(machine *machine)
 {
 	size_t len;
     
-	len = sizeof(machine->cpu.ncpus);
+	if (sysctlbyname("hw.ncpu", NULL, &len, NULL, 0)) {
+		return 1;
+	}
 	if (sysctlbyname("hw.ncpu", &(machine->cpu.ncpus), &len, NULL, 0)) {
 		return 1;
 	}
@@ -222,7 +224,9 @@ retrieve_memory_physmem(machine *machine)
 {
 	size_t len;
     
-	len = sizeof(machine->memory.physmem);
+	if (sysctlbyname("hw.memsize", NULL, &len, NULL, 0)) {
+		return 1;
+	}
 	if (sysctlbyname("hw.memsize", &(machine->memory.physmem), &len, NULL, 0)) {
 		return 1;
 	}
@@ -346,20 +350,17 @@ retrieve_memory_usage(usage *usage)
 	int64_t memfree;
 	int64_t pages;
     
-	len = sizeof(pagesize);
 	pagesize = 0;
 	if (sysctlbyname("vm.pagesize", &pagesize, &len, NULL, 0)) {
 		return 1;
 	}
     
-	len = sizeof(pages);
 	pages = 0;
 	if (sysctlbyname("vm.pages", &pages, &len, NULL, 0)) {
 		return 1;
 	}
 	usage->memory.memused = pagesize * pages;
     
-	len = sizeof(memfree);
 	memfree = 0;
 	if (sysctlbyname("vm.page_free_count", &memfree, &len, NULL, 0)) {
 		return 1;
@@ -407,7 +408,6 @@ retrieve_network_usage(usage *usage)
 	if (sysctl(mib, 6, NULL, &len, NULL, 0) < 0) {
 		return 1;
 	}
-
 	buf = malloc(len);
 	if (sysctl(mib, 6, buf, &len, NULL, 0) < 0) {
 		return 1;
