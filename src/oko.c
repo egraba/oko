@@ -21,7 +21,7 @@
  * The port name changes depending on the version.
  */
 #define MACH_PORT kIOMainPortDefault
-#ifdef OSX_BEFORE_MONTEREY
+#ifdef OSX_BIG_SUR
 #undef MACH_PORT
 #define MACH_PORT kIOMasterPortDefault
 #endif

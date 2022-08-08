@@ -5,7 +5,7 @@ OSX_VERSION = $(shell sysctl kern.osrelease | awk '{split($$2, v, "."); print v[
 
 CC			= clang -g
 ifneq ($(OSX_VERSION), 21)
-	CFLAGS = -Wall -Wextra -D OSX_BEFORE_MONTEREY
+	CFLAGS = -Wall -Wextra -D OSX_BIG_SUR
 else
 	CFLAGS	= -Wall -Wextra
 endif
