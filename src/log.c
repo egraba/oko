@@ -5,6 +5,38 @@
 #include "log.h"
 #include "cJSON.h"
 
+cJSON *json_machine;
+cJSON *hardware;
+cJSON *serialnumber;
+cJSON *type;
+cJSON *model;
+cJSON *network;
+cJSON *hostname;
+cJSON *ip;
+cJSON *macaddress;
+cJSON *cpu;
+cJSON *cpu_arch;
+cJSON *cpu_model;
+cJSON *ncpus;
+cJSON *memory;
+cJSON *physmem;
+cJSON *os;
+cJSON *name;
+cJSON *release;
+
+cJSON *json_usage;
+cJSON *cpu_user;
+cJSON *cpu_system;
+cJSON *cpu_idle;
+cJSON *cpu_nice;
+cJSON *memused;
+cJSON *memfree;
+cJSON *swaptotal;
+cJSON *swapused;
+cJSON *swapfree;
+cJSON *pckin;
+cJSON *pckout;
+
 void
 init_machine_info_json(machine *machine)
 {
@@ -16,12 +48,12 @@ init_machine_info_json(machine *machine)
 	cJSON_AddItemToObject(json_machine, "type", type);
 	model = cJSON_CreateString(machine->hardware.model);
 	cJSON_AddItemToObject(json_machine, "model", model);
-	hostname = cJSON_CreateString(machine->network.hostname);
-	cJSON_AddItemToObject(json_machine, "hostname", hostname);
 	
 	network = cJSON_CreateObject();
 	cJSON_AddItemToObject(json_machine, "network", network);
 	
+	hostname = cJSON_CreateString(machine->network.hostname);
+	cJSON_AddItemToObject(network, "hostname", hostname);
 	ip = cJSON_CreateString(machine->network.ip);
 	cJSON_AddItemToObject(network, "ip", ip);
 	macaddress = cJSON_CreateString(machine->network.macaddress);
@@ -104,10 +136,10 @@ init_machine_usage_json(usage *usage)
 	memory = cJSON_CreateObject();
 	cJSON_AddItemToObject(json_usage, "memory", memory);
 
-	memory_used = cJSON_CreateNumber(usage->memory.memused);
-	cJSON_AddItemToObject(memory, "used", memory_used);
-	memory_free = cJSON_CreateNumber(usage->memory.memfree);
-	cJSON_AddItemToObject(memory, "free", memory_free);
+	memused = cJSON_CreateNumber(usage->memory.memused);
+	cJSON_AddItemToObject(memory, "memused", memused);
+	memfree = cJSON_CreateNumber(usage->memory.memfree);
+	cJSON_AddItemToObject(memory, "memfree", memfree);
 	swapused = cJSON_CreateNumber(usage->memory.swapused);
 	cJSON_AddItemToObject(memory, "swapused", swapused);
 	swapfree = cJSON_CreateNumber(usage->memory.swapfree);
@@ -133,8 +165,8 @@ log_machine_usage(usage *usage)
 	cJSON_SetNumberValue(cpu_idle, usage->cpu.idle);
 	cJSON_SetNumberValue(cpu_nice, usage->cpu.nice);
 	
-	cJSON_SetNumberValue(memory_used, usage->memory.memused);
-	cJSON_SetNumberValue(memory_free, usage->memory.memfree);
+	cJSON_SetNumberValue(memused, usage->memory.memused);
+	cJSON_SetNumberValue(memfree, usage->memory.memfree);
 	cJSON_SetNumberValue(swapused, usage->memory.swapused);
 	cJSON_SetNumberValue(swapfree, usage->memory.swapfree);
 
