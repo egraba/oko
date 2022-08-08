@@ -17,20 +17,21 @@
 
 #include "oko.h"
 
+/*
+ * The port name changes depending on the version.
+ */
+#define MACH_PORT kIOMainPortDefault
+#ifdef OSX_BEFORE_MONTEREY
+#undef MACH_PORT
+#define MACH_PORT kIOMasterPortDefault
+#endif
+
 int
 retrieve_hardware_serialnumber(machine *machine)
 {
 	io_service_t platform_expert;
 	mach_port_t mp;
 
-	/*
-	 * The port name changes depending on the version.
-	 */
-#define MACH_PORT kIOMainPortDefault
-#ifdef OSX_BEFORE_MONTEREY
-#undef MACH_PORT
-#define MACH_PORT kIOMasterPortDefault
-#endif
 	mp = MACH_PORT;
 	platform_expert = IOServiceGetMatchingService(mp, IOServiceMatching("IOPlatformExpertDevice"));
 
