@@ -47,10 +47,6 @@ assert_margin(long actual, long expected, float margin)
 
     um = expected + margin * expected;
     lm = expected - margin * expected;
-    if (actual < um) {
-        ck_assert_uint_lt(actual, um);
-    }
-    else {
-        ck_assert_uint_ge(actual, lm);
-    }
+    ck_assert_uint_lt(actual, um);
+    ck_assert_uint_ge(actual, lm);
 }
