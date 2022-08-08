@@ -343,7 +343,7 @@ retrieve_memory_usage(usage *usage)
 {
 	size_t len;
 	int32_t pagesize;
-	int64_t free;
+	int64_t memfree;
 	int64_t pages;
     
 	len = sizeof(pagesize);
@@ -357,14 +357,14 @@ retrieve_memory_usage(usage *usage)
 	if (sysctlbyname("vm.pages", &pages, &len, NULL, 0)) {
 		return 1;
 	}
-	usage->memory.used = pagesize * pages;
+	usage->memory.memused = pagesize * pages;
     
-	len = sizeof(free);
-	free = 0;
-	if (sysctlbyname("vm.page_free_count", &free, &len, NULL, 0)) {
+	len = sizeof(memfree);
+	memfree = 0;
+	if (sysctlbyname("vm.page_free_count", &memfree, &len, NULL, 0)) {
 		return 1;
 	}
-	usage->memory.free = pagesize * free;
+	usage->memory.memfree = pagesize * memfree;
     
 	return 0;
 }

@@ -104,9 +104,9 @@ init_machine_usage_json(usage *usage)
 	memory = cJSON_CreateObject();
 	cJSON_AddItemToObject(json_usage, "memory", memory);
 
-	memory_used = cJSON_CreateNumber(usage->memory.used);
+	memory_used = cJSON_CreateNumber(usage->memory.memused);
 	cJSON_AddItemToObject(memory, "used", memory_used);
-	memory_free = cJSON_CreateNumber(usage->memory.free);
+	memory_free = cJSON_CreateNumber(usage->memory.memfree);
 	cJSON_AddItemToObject(memory, "free", memory_free);
 	swapused = cJSON_CreateNumber(usage->memory.swapused);
 	cJSON_AddItemToObject(memory, "swapused", swapused);
@@ -133,8 +133,8 @@ log_machine_usage(usage *usage)
 	cJSON_SetNumberValue(cpu_idle, usage->cpu.idle);
 	cJSON_SetNumberValue(cpu_nice, usage->cpu.nice);
 	
-	cJSON_SetNumberValue(memory_used, usage->memory.used);
-	cJSON_SetNumberValue(memory_free, usage->memory.free);
+	cJSON_SetNumberValue(memory_used, usage->memory.memused);
+	cJSON_SetNumberValue(memory_free, usage->memory.memfree);
 	cJSON_SetNumberValue(swapused, usage->memory.swapused);
 	cJSON_SetNumberValue(swapfree, usage->memory.swapfree);
 

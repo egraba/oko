@@ -37,8 +37,8 @@ typedef struct {
 		float nice;
 	} cpu;
 	struct {
-		int64_t used;
-		int64_t free;
+		int64_t memused;
+		int64_t memfree;
 		u_int64_t swapused;
 		u_int64_t swapfree;
 	} memory;
