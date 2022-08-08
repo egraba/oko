@@ -211,8 +211,13 @@ START_TEST(test_retrieve_memory_usage)
     execute("sysctl vm.pages | awk '{print $2*4096}'", memused);
     ck_assert_uint_eq(atol(memused), u.memory.memused);
 
+    /*
+     * This test currently does not work on GitHub actions host runner.
+     */
+#ifndef HOST_RUNNER
     execute("sysctl vm.page_free_count | awk '{print $2*4096}'", memfree);
     assert_margin(u.memory.memfree, atoll(memfree), 0.05);
+#endif
     
     free(memused);
     free(memfree);
