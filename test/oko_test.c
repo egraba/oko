@@ -203,19 +203,19 @@ END_TEST
 START_TEST(test_retrieve_memory_usage)
 {
     usage u;
-    char *mem_used = (char *) malloc(20);
-    char *mem_free = (char *) malloc(20);
+    char *memused = (char *) malloc(20);
+    char *memfree = (char *) malloc(20);
 
     retrieve_memory_usage(&u);
 
-    execute("sysctl vm.pages | awk '{print $2*4096}'", mem_used);
-    ck_assert_uint_eq(atol(mem_used), u.memory.used);
+    execute("sysctl vm.pages | awk '{print $2*4096}'", memused);
+    ck_assert_uint_eq(atol(memused), u.memory.memused);
 
-    execute("sysctl vm.page_free_count | awk '{print $2*4096}'", mem_free);
-    assert_margin(u.memory.free, atoll(mem_free), 0.05);
+    execute("sysctl vm.page_free_count | awk '{print $2*4096}'", memfree);
+    assert_margin(u.memory.memfree, atoll(memfree), 0.05);
     
-    free(mem_used);
-    free(mem_free);
+    free(memused);
+    free(memfree);
 }
 END_TEST
 
