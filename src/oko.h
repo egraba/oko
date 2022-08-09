@@ -45,22 +45,14 @@ typedef struct {
 	struct {
 		int64_t readin;
 		int64_t writeout;
-		int64_t readinsec;
-		int64_t writeoutsec;
 		int64_t dataread;
 		int64_t datawritten;
-		int64_t datareadsec;
-		int64_t datawrittensec;
 	} io;
 	struct {
 		int64_t pckin;
 		int64_t pckout;
-		int64_t pckinsec;
-		int64_t pckoutsec;
 		int64_t datarec;
 		int64_t datasent;
-		int64_t datarecsec;
-		int64_t datasentsec;
 	} network;
 } usage;
 

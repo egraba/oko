@@ -462,21 +462,13 @@ collect_machine_usage(usage *usage)
     
 	/* io.pckin */
 	/* io.pckout */
-	/* io.pckinsec */
-	/* io.pckoutsec */
 	/* io.datain */
 	/* io.dataout */
-	/* io.datainsec */
-	/* io.dataoutsec */
-    
+	
 	/* network.pckin */
 	/* network.pckout */
-	/* network.pckinsec */
-	/* network.pckoutsec */
 	/* network.datain */
 	/* network.dataout */
-	/* network.datainsec */
-	/* network.dataoutsec */
 	nerrors += retrieve_network_usage(usage);
     
 	return (nerrors);
