@@ -2,20 +2,34 @@
 Agent collecting information about the OS on which it is installed.
 
 ## Supported OSes
-* macOS (11 & 12)
+* macOS
+** Monterey (12)
+** Big Sur (11) 
 
 ## Collected data
 
 ### Machine data
-* Machine info (Serial number, type, model)
-* Hostname
-* IP address (only IPv4)
-* MAC address
-* CPU info (architecture, model, number of CPUs)
-* Physical memory
-* OS info (name, release, version)
+* Hardware info
+** Serial number
+** Type
+** model
+* Network info
+** Hostname
+** IP address (only IPv4)
+** MAC address
+* CPU info
+** Architecture
+** Model
+** Number of CPUs)
+* Memory info
+** Physical memory
+** Swap
+* OS info
+** Name
+** Release
 
 ### Usage data
 * CPU
 * Memory
 * Swap
+* Network
