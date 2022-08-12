@@ -36,6 +36,8 @@ cJSON *swapused;
 cJSON *swapfree;
 cJSON *pckin;
 cJSON *pckout;
+cJSON *datarec;
+cJSON *datasent;
 
 void
 init_machine_info_json(machine *machine)
@@ -152,6 +154,10 @@ init_machine_usage_json(usage *usage)
 	cJSON_AddItemToObject(network, "pckin", pckin);
 	pckout = cJSON_CreateNumber(usage->network.pckout);
 	cJSON_AddItemToObject(network, "pckout", pckout);
+	datarec = cJSON_CreateNumber(usage->network.pckin);
+	cJSON_AddItemToObject(network, "datarec", datarec);
+	datasent = cJSON_CreateNumber(usage->network.pckout);
+	cJSON_AddItemToObject(network, "datasent", datasent);
 }
 
 void
@@ -172,6 +178,8 @@ log_machine_usage(usage *usage)
 
 	cJSON_SetNumberValue(pckin, usage->network.pckin);
 	cJSON_SetNumberValue(pckout, usage->network.pckout);
+	cJSON_SetNumberValue(datarec, usage->network.datarec);
+	cJSON_SetNumberValue(datasent, usage->network.datasent);
 	
 	printf("[oko] %02d-%02d-%02d %02d:%02d:%02d -- USAGE -- %s\n",
 		tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900, tm.tm_hour, tm.tm_min, tm.tm_sec,

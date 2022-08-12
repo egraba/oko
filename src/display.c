@@ -64,8 +64,9 @@ print_machine_usage(WINDOW *win, int line, int col, usage *usage)
 	mvwprintw(win, ++line, col, "memory used: %s, free: %s, swapused: %s, swapfree: %s",
 		human_readable(usage->memory.memused), human_readable(usage->memory.memfree),
 		human_readable(usage->memory.swapused), human_readable(usage->memory.swapfree));
-	mvwprintw(win, ++line, col, "network pckin: %lld, pckout: %lld",
-		usage->network.pckin, usage->network.pckout);
+	mvwprintw(win, ++line, col, "network pckin: %lld, pckout: %lld, datarec: %s, datasent: %s",
+		usage->network.pckin, usage->network.pckout,
+		human_readable(usage->network.datarec), human_readable(usage->network.datasent));
 
 	wrefresh(win);
 }

@@ -421,6 +421,8 @@ retrieve_network_usage(usage *usage)
 
 	usage->network.pckin = 0;
 	usage->network.pckout = 0;
+	usage->network.datarec = 0;
+	usage->network.datasent = 0;
 
 	lim = buf + len;
 	for (next = buf; next < lim; ) {
@@ -432,6 +434,8 @@ retrieve_network_usage(usage *usage)
 			
 			usage->network.pckin += if2m->ifm_data.ifi_ipackets;
 			usage->network.pckout += if2m->ifm_data.ifi_opackets;
+			usage->network.datarec += if2m->ifm_data.ifi_ibytes;
+			usage->network.datasent += if2m->ifm_data.ifi_obytes;
 		}
 	}
 
