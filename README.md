@@ -3,8 +3,8 @@ Agent collecting information about the OS on which it is installed.
 
 ## Supported OSes
 * macOS
-** Monterey (12)
-** Big Sur (11) 
+  - Monterey (12)
+  - Big Sur (11) 
 
 ## Collected data
 
@@ -45,4 +45,4 @@ Options:
 ```
 
 ### Screenshots
-![alt text](https://github.com/egraba/oko-client/doc/oko-standalone-screenshot-01.png "standalone-screenshot-01")
+![alt text](doc/oko-standalone-screenshot-01.png "standalone-screenshot-01")
