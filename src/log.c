@@ -39,6 +39,17 @@ cJSON *pckout;
 cJSON *datarec;
 cJSON *datasent;
 
+static void
+log_json(char * json_string)
+{
+	time_t t = time(NULL);
+	struct tm tm = *localtime(&t);
+
+	printf("[oko] %02d-%02d-%02d %02d:%02d:%02d -- MACHINE -- %s\n",
+		tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900, tm.tm_hour, tm.tm_min, tm.tm_sec,
+		json_string);
+}
+
 void
 init_machine_info_json(machine *machine)
 {
@@ -92,9 +103,6 @@ init_machine_info_json(machine *machine)
 void
 log_machine_info(machine *machine)
 {
-	time_t t = time(NULL);
-	struct tm tm = *localtime(&t);
-
 	cJSON_SetValuestring(serialnumber, machine->hardware.serialnumber);
 	cJSON_SetValuestring(type, machine->hardware.type);
 	cJSON_SetValuestring(model, machine->hardware.model);
@@ -113,9 +121,7 @@ log_machine_info(machine *machine)
 	cJSON_SetValuestring(name, machine->os.name);
 	cJSON_SetValuestring(release, machine->os.release);
 	
-	printf("[oko] %02d-%02d-%02d %02d:%02d:%02d -- MACHINE -- %s\n",
-		tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900, tm.tm_hour, tm.tm_min, tm.tm_sec,
-		cJSON_PrintUnformatted(json_machine));
+	log_json(cJSON_PrintUnformatted(json_machine));
 }
 
 void
@@ -163,9 +169,6 @@ init_machine_usage_json(usage *usage)
 void
 log_machine_usage(usage *usage)
 {
-	time_t t = time(NULL);
-	struct tm tm = *localtime(&t);
-
 	cJSON_SetNumberValue(cpu_user, usage->cpu.user);
 	cJSON_SetNumberValue(cpu_system, usage->cpu.system);
 	cJSON_SetNumberValue(cpu_idle, usage->cpu.idle);
@@ -181,9 +184,7 @@ log_machine_usage(usage *usage)
 	cJSON_SetNumberValue(datarec, usage->network.datarec);
 	cJSON_SetNumberValue(datasent, usage->network.datasent);
 	
-	printf("[oko] %02d-%02d-%02d %02d:%02d:%02d -- USAGE -- %s\n",
-		tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900, tm.tm_hour, tm.tm_min, tm.tm_sec,
-		cJSON_PrintUnformatted(json_usage));
+	log_json(cJSON_PrintUnformatted(json_usage));
 }
 
 int
