@@ -45,7 +45,7 @@ log_json(char * json_string)
 	time_t t = time(NULL);
 	struct tm tm = *localtime(&t);
 
-	printf("[oko] %02d-%02d-%02d %02d:%02d:%02d -- MACHINE -- %s\n",
+	printf("[oko] %02d-%02d-%02dT%02d:%02d:%02d -- MACHINE -- %s\n",
 		tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900, tm.tm_hour, tm.tm_min, tm.tm_sec,
 		json_string);
 }
