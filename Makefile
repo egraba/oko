@@ -34,4 +34,5 @@ clean:
 	rm -rdf $(EXEC).dSYM
 	rm -f $(EXEC_TEST)
 	rm -rdf $(EXEC_TEST).dSYM
-	rm -rdf *_test.txt
+	rm -f *.log
+	rm -f *_test.txt
