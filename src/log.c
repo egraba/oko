@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <time.h>
 #include <unistd.h>
 
@@ -51,6 +52,7 @@ log_json(char *json_type, char * json_string)
 		tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900, tm.tm_hour, tm.tm_min, tm.tm_sec,
 		json_type, json_string);
 	fclose(fp);
+	free(json_string);
 }
 
 void
