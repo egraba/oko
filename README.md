@@ -4,7 +4,11 @@ Agent collecting information about the OS on which it is installed.
 ## Supported OSes
 * macOS
   - Monterey (12)
-  - Big Sur (11) 
+  - Big Sur (11)
+
+## Libraries & framworks
+* [cJSON](https://github.com/DaveGamble/cJSON)
+* [check](https://libcheck.github.io/check/)
 
 ## Collected data
 
@@ -45,4 +49,10 @@ Options:
 ```
 
 ### Screenshots
+
+#### Standalone mode
 ![alt text](doc/oko-standalone-screenshot-01.png "standalone-screenshot-01")
+
+#### Logging mode
+This example shows custom Kibana dashboards.
+![alt text](doc/oko-logging-screenshot-01.png "logging-screenshot-01")
