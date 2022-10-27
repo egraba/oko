@@ -4,3 +4,7 @@ oko_test
 oko_test.dSYM
 *.log
 *_test.txt
+
+# Added by cargo
+
+/target
