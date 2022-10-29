@@ -1,4 +1,5 @@
 use clap::Parser;
+use std::{thread, time};
 
 /// Agent collecting information about the OS on which it is installed
 #[derive(Parser)]
@@ -6,9 +7,15 @@ use clap::Parser;
 struct Args {
     /// Sets refresh interval (in seconds)
     #[arg(short, long, default_value_t = 2)]
-    interval: u32,
+    interval: u64,
 }
 
 fn main() {
-    let _args = Args::parse();
+    let args = Args::parse();
+    let interval = time::Duration::from_secs(args.interval);
+
+    loop {
+        println!("Mira!");
+        thread::sleep(interval);
+    }
 }
