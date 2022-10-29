@@ -6,7 +6,7 @@ use clap::Parser;
 struct Args {
     /// Sets refresh interval (in seconds)
     #[arg(short, long, default_value_t = 2)]
-    interval: u8,
+    interval: u32,
 }
 
 fn main() {
