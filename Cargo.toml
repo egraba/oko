@@ -7,5 +7,5 @@ edition = "2021"
 
 [dependencies]
 clap = { version = "4.0.18", features = ["derive"] }
-cursive = "0.20.0"
+cursive = { version = "0.20.0", features = ["toml"] }
 sysinfo = "0.26.6"

@@ -19,6 +19,7 @@ fn main() {
     let sys = System::new_all();
 
     let mut siv = cursive::default();
+    siv.load_toml(include_str!("theme.toml")).unwrap();
 
     siv.add_global_callback('q', |s| s.quit());
 
