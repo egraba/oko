@@ -31,18 +31,24 @@ fn main() {
 
     let linear_layout = LinearLayout::vertical()
         .child(TextView::new("oko <o> - Press 'q' to exit."))
-        .child(Panel::new(TextView::new(format!(
-            "os name: {:?}, release: {:?}",
-            sys.name(),
-            sys.os_version()
-        ))))
-        .child(Panel::new(TextView::new(format!(
-            "memory used: {:?}, free: {:?}, swapused: {:?}, swapfree: {:?}",
-            sys.used_memory(),
-            sys.free_memory(),
-            sys.used_swap(),
-            sys.free_swap()
-        ))));
+        .child(
+            Panel::new(TextView::new(format!(
+                "os name: {:?}, release: {:?}",
+                sys.name(),
+                sys.os_version()
+            )))
+            .title("Machine"),
+        )
+        .child(
+            Panel::new(TextView::new(format!(
+                "memory used: {:?}, free: {:?}, swapused: {:?}, swapfree: {:?}",
+                sys.used_memory(),
+                sys.free_memory(),
+                sys.used_swap(),
+                sys.free_swap()
+            )))
+            .title("Usage"),
+        );
 
     siv.add_layer(linear_layout);
 
