@@ -1,21 +1,22 @@
 use crate::display::launch_display_mode;
-use clap::Parser;
+use clap::{arg, command};
 use std::time;
 
 pub mod display;
 
-/// Agent collecting information about the OS on which it is installed
-#[derive(Parser)]
-#[command(version)]
-struct Args {
-    /// Sets refresh interval (in seconds)
-    #[arg(short, long, default_value_t = 2)]
-    interval: u64,
-}
-
 fn main() {
-    let args = Args::parse();
-    let interval = time::Duration::from_secs(args.interval).as_secs();
+    let matches = command!()
+        .about("Agent collecting information about the OS on which it is installed")
+        .arg(arg!(-i --interval <INTERVAL> "Sets refresh interval (in seconds)"))
+        .arg(arg!(-d --display "Displays the output on the terminal"))
+        .get_matches();
+
+    let interval = matches
+        .get_one::<String>("interval")
+        .expect("Default interval is 2")
+        .parse::<u64>()
+        .unwrap();
+    let interval = time::Duration::from_secs(interval).as_secs();
 
     launch_display_mode(interval);
 }
