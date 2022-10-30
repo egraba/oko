@@ -1,6 +1,7 @@
 use clap::Parser;
-use std::{thread, time};
-use sysinfo::{NetworkExt, ProcessExt, System, SystemExt};
+use cursive::views::{LinearLayout, TextView};
+use std::time;
+use sysinfo::{System, SystemExt};
 
 /// Agent collecting information about the OS on which it is installed
 #[derive(Parser)]
@@ -13,45 +14,23 @@ struct Args {
 
 fn main() {
     let args = Args::parse();
-    let interval = time::Duration::from_secs(args.interval);
+    let _interval = time::Duration::from_secs(args.interval);
 
-    let mut sys = System::new_all();
+    let sys = System::new_all();
 
-    loop {
-        sys.refresh_all();
+    let mut siv = cursive::default();
 
-        println!("=> disks:");
-        for disk in sys.disks() {
-            println!("{:?}", disk);
-        }
+    siv.add_global_callback('q', |s| s.quit());
 
-        println!("=> networks:");
-        for (interface_name, data) in sys.networks() {
-            println!("{}: {}/{} B", interface_name, data.received(), data.transmitted());
-        }
+    let linear_layout = LinearLayout::vertical()
+        .child(TextView::new("oko <o> - Press 'q' to exit."))
+        .child(TextView::new(format!(
+            "os name: {:?}, release: {:?}",
+            sys.name(),
+            sys.os_version()
+        )));
 
-        println!("=> components:");
-        for component in sys.components() {
-            println!("{:?}", component);
-        }
+    siv.add_layer(linear_layout);
 
-        println!("=> system:");
-        println!("total memory: {} bytes", sys.total_memory());
-        println!("used memory : {} bytes", sys.used_memory());
-        println!("total swap  : {} bytes", sys.total_swap());
-        println!("used swap   : {} bytes", sys.used_swap());
-
-        println!("System name:             {:?}", sys.name());
-        println!("System kernel version:   {:?}", sys.kernel_version());
-        println!("System OS version:       {:?}", sys.os_version());
-        println!("System host name:        {:?}", sys.host_name());
-
-        println!("NB CPUs: {}", sys.cpus().len());
-
-        for (pid, process) in sys.processes() {
-            println!("[{}] {} {:?}", pid, process.name(), process.disk_usage());
-        }
-
-        thread::sleep(interval);
-    }
+    siv.run();
 }
