@@ -171,6 +171,7 @@ dependencies = [
  "num",
  "owning_ref",
  "time",
+ "toml",
  "unicode-segmentation",
  "unicode-width",
  "xi-unicode",
@@ -656,6 +657,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "65bb801831d812c562ae7d2bfb531f26e66e4e1f6b17307ba4149c5064710e5b"
 dependencies = [
  "time-core",
+]
+
+[[package]]
+name = "toml"
+version = "0.5.9"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "8d82e1a7758622a465f8cee077614c73484dac5b836c02ff6a40d5d1010324d7"
+dependencies = [
+ "serde",
 ]
 
 [[package]]
