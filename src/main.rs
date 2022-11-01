@@ -35,7 +35,7 @@ fn main() {
             launch_display_mode(interval);
         }
         "log" => {
-            launch_log_mode();
+            launch_log_mode(interval);
         }
         _ => unreachable!(),
     }
