@@ -24,7 +24,7 @@ fn main() {
     let interval = matches
         .get_one::<u64>("interval")
         .expect("Default interval is 2");
-    let interval = time::Duration::from_secs(*interval).as_secs();
+    let interval = time::Duration::from_secs(*interval);
 
     match matches
         .get_one::<String>("MODE")
