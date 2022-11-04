@@ -1,5 +1,5 @@
 use crate::oko::collect_machine_info;
-use crate::oko::Os;
+use crate::oko::OsInfo;
 use cursive::views::{LinearLayout, Panel, TextView};
 use std::time;
 
@@ -16,16 +16,16 @@ pub fn launch_display_mode(interval: time::Duration) {
 
     siv.add_global_callback('q', |s| s.quit());
 
-    let mut os = Os::new();
-    collect_machine_info(&mut os);
+    let mut osi = OsInfo::new();
+    collect_machine_info(&mut osi);
 
     let linear_layout = LinearLayout::vertical()
         .child(TextView::new("oko <o> - Press 'q' to exit."))
         .child(
             Panel::new(TextView::new(format!(
                 "os name: {}, release: {}",
-                os.name(),
-                os.release()
+                osi.name(),
+                osi.release()
             )))
             .title("Machine"),
         )
