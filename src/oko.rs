@@ -1,12 +1,30 @@
 use sysinfo::{System, SystemExt};
 
+const NOT_RETRIEVED: &str = "NOT_RETRIEVED";
+
 #[derive(Debug)]
 pub struct Os {
-    pub name: String,
-    pub release: String,
+    name: String,
+    release: String,
 }
 
-const NOT_RETRIEVED: &str = "NOT_RETRIEVED";
+impl Os {
+    pub fn new() -> Self {
+        Os {
+            name: String::new(),
+            release: String::new(),
+        }
+    }
+
+    pub fn name(&self) -> &str {
+        &self.name
+    }
+
+    pub fn release(&self) -> &str {
+        &self.release
+    }
+}
+
 
 pub fn collect_machine_info(os: &mut Os) {
     let mut sys = System::new_all();
