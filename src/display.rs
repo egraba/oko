@@ -24,7 +24,8 @@ pub fn launch_display_mode(interval: time::Duration) {
         .child(
             Panel::new(TextView::new(format!(
                 "os name: {}, release: {}",
-                os.name(), os.release()
+                os.name(),
+                os.release()
             )))
             .title("Machine"),
         )
