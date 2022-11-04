@@ -3,6 +3,29 @@ use sysinfo::{System, SystemExt};
 const NOT_RETRIEVED: &str = "NOT_RETRIEVED";
 
 #[derive(Debug)]
+pub struct MemoryInfo {
+    physmem: u64,
+    swaptotal: u64,
+}
+
+impl MemoryInfo {
+    pub fn new() -> Self {
+        MemoryInfo {
+            physmem: 0,
+            swaptotal: 0,
+        }
+    }
+
+    pub fn physmem(&self) -> u64 {
+        self.physmem
+    }
+
+    pub fn swaptotal(&self) -> u64 {
+        self.swaptotal
+    }
+}
+
+#[derive(Debug)]
 pub struct OsInfo {
     name: String,
     release: String,
@@ -25,9 +48,12 @@ impl OsInfo {
     }
 }
 
-pub fn collect_machine_info(os_info: &mut OsInfo) {
+pub fn collect_machine_info(memory_info: &mut MemoryInfo, os_info: &mut OsInfo) {
     let mut sys = System::new_all();
     sys.refresh_all();
+
+    memory_info.physmem = sys.total_memory();
+    memory_info.swaptotal = sys.total_swap();
 
     os_info.name = sys.name().expect(NOT_RETRIEVED);
     os_info.release = sys.os_version().expect(NOT_RETRIEVED);
