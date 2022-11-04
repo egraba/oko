@@ -77,7 +77,11 @@ impl OsInfo {
     }
 }
 
-pub fn collect_machine_info(cpu_info: &mut CpuInfo, memory_info: &mut MemoryInfo, os_info: &mut OsInfo) {
+pub fn collect_machine_info(
+    cpu_info: &mut CpuInfo,
+    memory_info: &mut MemoryInfo,
+    os_info: &mut OsInfo,
+) {
     let mut sys = System::new_all();
     sys.refresh_all();
 
