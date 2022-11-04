@@ -16,10 +16,7 @@ pub fn launch_display_mode(interval: time::Duration) {
 
     siv.add_global_callback('q', |s| s.quit());
 
-    let mut os = Os {
-        name: String::new(),
-        release: String::new(),
-    };
+    let mut os = Os::new();
     collect_machine_info(&mut os);
 
     let linear_layout = LinearLayout::vertical()
@@ -27,7 +24,7 @@ pub fn launch_display_mode(interval: time::Duration) {
         .child(
             Panel::new(TextView::new(format!(
                 "os name: {}, release: {}",
-                os.name, os.release
+                os.name(), os.release()
             )))
             .title("Machine"),
         )
