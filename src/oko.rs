@@ -3,14 +3,14 @@ use sysinfo::{System, SystemExt};
 const NOT_RETRIEVED: &str = "NOT_RETRIEVED";
 
 #[derive(Debug)]
-pub struct Os {
+pub struct OsInfo {
     name: String,
     release: String,
 }
 
-impl Os {
+impl OsInfo {
     pub fn new() -> Self {
-        Os {
+        OsInfo {
             name: String::new(),
             release: String::new(),
         }
@@ -25,10 +25,10 @@ impl Os {
     }
 }
 
-pub fn collect_machine_info(os: &mut Os) {
+pub fn collect_machine_info(os_info: &mut OsInfo) {
     let mut sys = System::new_all();
     sys.refresh_all();
 
-    os.name = sys.name().expect(NOT_RETRIEVED);
-    os.release = sys.os_version().expect(NOT_RETRIEVED);
+    os_info.name = sys.name().expect(NOT_RETRIEVED);
+    os_info.release = sys.os_version().expect(NOT_RETRIEVED);
 }
