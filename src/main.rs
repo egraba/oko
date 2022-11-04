@@ -5,6 +5,7 @@ use std::time;
 
 pub mod display;
 pub mod log;
+pub mod oko;
 
 fn main() {
     let matches = command!()
