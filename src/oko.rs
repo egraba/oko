@@ -25,7 +25,6 @@ impl Os {
     }
 }
 
-
 pub fn collect_machine_info(os: &mut Os) {
     let mut sys = System::new_all();
     sys.refresh_all();
