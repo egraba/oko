@@ -1,4 +1,4 @@
-use sysinfo::{System, SystemExt};
+use sysinfo::{CpuExt, System, SystemExt};
 
 const NOT_RETRIEVED: &str = "NOT_RETRIEVED";
 
@@ -85,6 +85,7 @@ pub fn collect_machine_info(
     let mut sys = System::new_all();
     sys.refresh_all();
 
+    cpu_info.model = sys.cpus()[0].name().to_string();
     cpu_info.ncpus = sys.cpus().len();
 
     memory_info.physmem = sys.total_memory();
