@@ -1,5 +1,5 @@
 use crate::oko::collect_machine_info;
-use crate::oko::{CpuInfo, NetworkInfo, MemoryInfo, OsInfo};
+use crate::oko::{CpuInfo, MemoryInfo, NetworkInfo, OsInfo};
 use cursive::views::{LinearLayout, Panel, TextView};
 use std::time;
 
