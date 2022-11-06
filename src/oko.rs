@@ -3,6 +3,35 @@ use sysinfo::{CpuExt, System, SystemExt};
 const NOT_RETRIEVED: &str = "NOT_RETRIEVED";
 
 #[derive(Debug)]
+pub struct HardwareInfo {
+    serialnumber: String,
+    hwtype: String,
+    model: String,
+}
+
+impl HardwareInfo {
+    pub fn new() -> Self {
+        HardwareInfo {
+            serialnumber: String::new(),
+            hwtype: String::new(),
+            model: String::new(),
+        }
+    }
+
+    pub fn serialnumber(&self) -> &str {
+        &self.serialnumber
+    }
+
+    pub fn hwtype(&self) -> &str {
+        &self.hwtype
+    }
+
+    pub fn model(&self) -> &str {
+        &self.model
+    }
+}
+
+#[derive(Debug)]
 pub struct NetworkInfo {
     hostname: String,
     ip: String,
@@ -22,7 +51,7 @@ impl NetworkInfo {
         &self.hostname
     }
 
-    pub fn ip(&self) -> & str {
+    pub fn ip(&self) -> &str {
         &self.ip
     }
 
@@ -116,7 +145,7 @@ pub fn collect_machine_info(
     sys.refresh_all();
 
     network_info.hostname = sys.host_name().expect(NOT_RETRIEVED);
-    
+
     cpu_info.model = sys.cpus()[0].name().to_string();
     cpu_info.ncpus = sys.cpus().len();
 
