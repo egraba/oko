@@ -1,49 +1,95 @@
 use crate::oko::collect_machine_info;
-use crate::oko::{CpuInfo, MemoryInfo, NetworkInfo, OsInfo};
-use cursive::views::{LinearLayout, Panel, TextView};
+use crate::oko::{CpuInfo, HardwareInfo, MemoryInfo, NetworkInfo, OsInfo};
+use crossterm::execute;
+use crossterm::terminal::{
+    disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen,
+};
+use std::io;
+use std::thread;
 use std::time;
+use tui::{
+    backend::CrosstermBackend,
+    layout::Rect,
+    text::{Span, Spans},
+    widgets::{Block, Borders, Paragraph},
+    Terminal,
+};
 
-pub fn launch_display_mode(interval: time::Duration) {
-    let mut siv = cursive::default();
-    siv.load_toml(include_str!("theme.toml")).unwrap();
+pub fn launch_display_mode(_interval: time::Duration) -> Result<(), io::Error> {
+    enable_raw_mode()?;
+    let mut stdout = io::stdout();
+    execute!(stdout, EnterAlternateScreen)?;
+    let backend = CrosstermBackend::new(stdout);
+    let mut terminal = Terminal::new(backend)?;
 
-    const MAX_REFRESH_RATE: u64 = 30;
-    let interval = interval.as_secs();
-    match interval {
-        0..=MAX_REFRESH_RATE => siv.set_fps(interval.try_into().unwrap()),
-        _ => siv.set_fps(MAX_REFRESH_RATE.try_into().unwrap()),
-    }
+    terminal.clear()?;
 
-    siv.add_global_callback('q', |s| s.quit());
+    terminal.draw(|f| {
+        let size = f.size();
 
-    let mut neti = NetworkInfo::new();
-    let mut cpui = CpuInfo::new();
-    let mut osi = OsInfo::new();
-    let mut memi = MemoryInfo::new();
-    collect_machine_info(&mut neti, &mut cpui, &mut memi, &mut osi);
+        let instruction = "oko <o> - Press 'q' to exit.";
+        let instruction = Paragraph::new(instruction);
+        let instruction_size = Rect {
+            x: 0,
+            y: 0,
+            width: size.width,
+            height: 1,
+        };
+        f.render_widget(instruction, instruction_size);
 
-    let linear_layout = LinearLayout::vertical()
-        .child(TextView::new("oko <o> - Press 'q' to exit."))
-        .child(
-            Panel::new(TextView::new(format!(
+        let hwi = HardwareInfo::new();
+        let mut neti = NetworkInfo::new();
+        let mut cpui = CpuInfo::new();
+        let mut osi = OsInfo::new();
+        let mut memi = MemoryInfo::new();
+        collect_machine_info(&mut neti, &mut cpui, &mut memi, &mut osi);
+
+        let machine = vec![
+            Spans::from(vec![Span::raw(format!(
+                "hardware serialnumber: {}, type: {}, model: {}",
+                hwi.serialnumber(),
+                hwi.hwtype(),
+                hwi.model(),
+            ))]),
+            Spans::from(vec![Span::raw(format!(
+                "network hostname: {}, ip: {}, macaddress: {}",
+                neti.hostname(),
+                neti.ip(),
+                neti.macaddress(),
+            ))]),
+            Spans::from(vec![Span::raw(format!(
+                "cpu arch: {}, model: {}, ncpus: {}",
+                cpui.arch(),
+                cpui.model(),
+                cpui.ncpus(),
+            ))]),
+            Spans::from(vec![Span::raw(format!(
+                "memory physmem: {}, swaptotal: {}",
+                memi.physmem(),
+                memi.swaptotal(),
+            ))]),
+            Spans::from(vec![Span::raw(format!(
                 "os name: {}, release: {}",
                 osi.name(),
-                osi.release()
-            )))
-            .title("Machine"),
-        )
-        .child(
-            Panel::new(TextView::new(format!(
-                "memory used: {}, free: {}, swapused: {}, swapfree: {}",
-                String::new(),
-                String::new(),
-                String::new(),
-                String::new()
-            )))
-            .title("Usage"),
-        );
+                osi.release(),
+            ))]),
+        ];
+        let machine =
+            Paragraph::new(machine).block(Block::default().title("Machine").borders(Borders::ALL));
+        let machine_size = Rect {
+            x: 0,
+            y: 1,
+            width: size.width,
+            height: 7,
+        };
+        f.render_widget(machine, machine_size);
+    })?;
 
-    siv.add_layer(linear_layout);
+    thread::sleep(time::Duration::from_secs(5));
 
-    siv.run();
+    disable_raw_mode()?;
+    execute!(terminal.backend_mut(), LeaveAlternateScreen)?;
+    terminal.show_cursor()?;
+
+    Ok(())
 }

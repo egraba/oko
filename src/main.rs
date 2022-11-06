@@ -33,7 +33,7 @@ fn main() {
         .as_str()
     {
         "display" => {
-            launch_display_mode(interval);
+            launch_display_mode(interval).expect("Error while launching display mode");
         }
         "log" => {
             launch_log_mode(interval);
