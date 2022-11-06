@@ -3,6 +3,35 @@ use sysinfo::{CpuExt, System, SystemExt};
 const NOT_RETRIEVED: &str = "NOT_RETRIEVED";
 
 #[derive(Debug)]
+pub struct NetworkInfo {
+    hostname: String,
+    ip: String,
+    macaddress: String,
+}
+
+impl NetworkInfo {
+    pub fn new() -> Self {
+        NetworkInfo {
+            hostname: String::new(),
+            ip: String::new(),
+            macaddress: String::new(),
+        }
+    }
+
+    pub fn hostname(&self) -> &str {
+        &self.hostname
+    }
+
+    pub fn ip(&self) -> & str {
+        &self.ip
+    }
+
+    pub fn macaddress(&self) -> &str {
+        &self.macaddress
+    }
+}
+
+#[derive(Debug)]
 pub struct CpuInfo {
     arch: String,
     model: String,
@@ -78,6 +107,7 @@ impl OsInfo {
 }
 
 pub fn collect_machine_info(
+    network_info: &mut NetworkInfo,
     cpu_info: &mut CpuInfo,
     memory_info: &mut MemoryInfo,
     os_info: &mut OsInfo,
@@ -85,6 +115,8 @@ pub fn collect_machine_info(
     let mut sys = System::new_all();
     sys.refresh_all();
 
+    network_info.hostname = sys.host_name().expect(NOT_RETRIEVED);
+    
     cpu_info.model = sys.cpus()[0].name().to_string();
     cpu_info.ncpus = sys.cpus().len();
 
