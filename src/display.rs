@@ -1,5 +1,5 @@
 use crate::oko::collect_machine_info;
-use crate::oko::{CpuInfo, HardwareInfo, MemoryInfo, NetworkInfo, OsInfo};
+use crate::oko::Device;
 use crossterm::event::{self, Event as CEvent, KeyCode};
 use crossterm::execute;
 use crossterm::terminal::{
@@ -68,41 +68,37 @@ pub fn launch_display_mode(_interval: Duration) -> Result<(), io::Error> {
         };
         f.render_widget(instruction, instruction_size);
 
-        let hwi = HardwareInfo::new();
-        let mut neti = NetworkInfo::new();
-        let mut cpui = CpuInfo::new();
-        let mut osi = OsInfo::new();
-        let mut memi = MemoryInfo::new();
-        collect_machine_info(&mut neti, &mut cpui, &mut memi, &mut osi);
+        let mut device = Device::new();
+        collect_machine_info(&mut device);
 
         let machine = vec![
             Spans::from(vec![Span::raw(format!(
                 "hardware serialnumber: {}, type: {}, model: {}",
-                hwi.serialnumber(),
-                hwi.hwtype(),
-                hwi.model(),
+                device.hw_serial_number(),
+                device.hw_type(),
+                device.hw_model(),
             ))]),
             Spans::from(vec![Span::raw(format!(
                 "network hostname: {}, ip: {}, macaddress: {}",
-                neti.hostname(),
-                neti.ip(),
-                neti.macaddress(),
+                device.net_host_name(),
+                device.net_ipv4(),
+                device.net_mac(),
             ))]),
             Spans::from(vec![Span::raw(format!(
                 "cpu arch: {}, model: {}, ncpus: {}",
-                cpui.arch(),
-                cpui.model(),
-                cpui.ncpus(),
+                device.cpu_arch(),
+                device.cpu_model(),
+                device.cpu_ncpus(),
             ))]),
             Spans::from(vec![Span::raw(format!(
                 "memory physmem: {}, swaptotal: {}",
-                memi.physmem(),
-                memi.swaptotal(),
+                device.mem_phys_total(),
+                device.mem_swap_total(),
             ))]),
             Spans::from(vec![Span::raw(format!(
                 "os name: {}, release: {}",
-                osi.name(),
-                osi.release(),
+                device.os_name(),
+                device.os_release(),
             ))]),
         ];
         let machine =

@@ -4,156 +4,107 @@ const NOT_IMPELMENTED: &str = "NOT_IMPLEMENTED";
 const NOT_RETRIEVED: &str = "NOT_RETRIEVED";
 
 #[derive(Debug)]
-pub struct HardwareInfo {
-    serialnumber: String,
-    hwtype: String,
-    model: String,
+pub struct Device {
+    hw_serial_number: String,
+    hw_type: String,
+    hw_model: String,
+    net_host_name: String,
+    net_ipv4: String,
+    net_mac: String,
+    cpu_arch: String,
+    cpu_model: String,
+    cpu_ncpus: usize,
+    mem_phys_total: u64,
+    mem_swap_total: u64,
+    os_name: String,
+    os_release: String,
 }
 
-impl HardwareInfo {
+impl Device {
     pub fn new() -> Self {
-        HardwareInfo {
-            serialnumber: String::new(),
-            hwtype: String::new(),
-            model: String::new(),
+        Device {
+            hw_serial_number: String::new(),
+            hw_type: String::new(),
+            hw_model: String::new(),
+            net_host_name: String::new(),
+            net_ipv4: String::new(),
+            net_mac: String::new(),
+            cpu_arch: String::new(),
+            cpu_model: String::new(),
+            cpu_ncpus: 0,
+            mem_phys_total: 0,
+            mem_swap_total: 0,
+            os_name: String::new(),
+            os_release: String::new(),
         }
     }
 
-    pub fn serialnumber(&self) -> &str {
-        &self.serialnumber
+    pub fn hw_serial_number(&self) -> &str {
+        &self.hw_serial_number
     }
 
-    pub fn hwtype(&self) -> &str {
-        &self.hwtype
+    pub fn hw_type(&self) -> &str {
+        &self.hw_type
     }
 
-    pub fn model(&self) -> &str {
-        &self.model
-    }
-}
-
-#[derive(Debug)]
-pub struct NetworkInfo {
-    hostname: String,
-    ip: String,
-    macaddress: String,
-}
-
-impl NetworkInfo {
-    pub fn new() -> Self {
-        NetworkInfo {
-            hostname: String::new(),
-            ip: String::new(),
-            macaddress: String::new(),
-        }
+    pub fn hw_model(&self) -> &str {
+        &self.hw_model
     }
 
-    pub fn hostname(&self) -> &str {
-        &self.hostname
+    pub fn net_host_name(&self) -> &str {
+        &self.net_host_name
     }
 
-    pub fn ip(&self) -> &str {
-        &self.ip
+    pub fn net_ipv4(&self) -> &str {
+        &self.net_ipv4
     }
 
-    pub fn macaddress(&self) -> &str {
-        &self.macaddress
-    }
-}
-
-#[derive(Debug)]
-pub struct CpuInfo {
-    arch: String,
-    model: String,
-    ncpus: usize,
-}
-
-impl CpuInfo {
-    pub fn new() -> Self {
-        CpuInfo {
-            arch: String::new(),
-            model: String::new(),
-            ncpus: 0,
-        }
+    pub fn net_mac(&self) -> &str {
+        &self.net_mac
     }
 
-    pub fn arch(&self) -> &str {
-        &self.arch
+    pub fn cpu_arch(&self) -> &str {
+        &self.cpu_arch
     }
 
-    pub fn model(&self) -> &str {
-        &self.model
+    pub fn cpu_model(&self) -> &str {
+        &self.cpu_model
     }
 
-    pub fn ncpus(&self) -> usize {
-        self.ncpus
+    pub fn cpu_ncpus(&self) -> usize {
+        self.cpu_ncpus
+    }
+
+    pub fn mem_phys_total(&self) -> u64 {
+        self.mem_phys_total
+    }
+
+    pub fn mem_swap_total(&self) -> u64 {
+        self.mem_swap_total
+    }
+
+    pub fn os_name(&self) -> &str {
+        &self.os_name
+    }
+
+    pub fn os_release(&self) -> &str {
+        &self.os_release
     }
 }
 
-#[derive(Debug)]
-pub struct MemoryInfo {
-    physmem: u64,
-    swaptotal: u64,
-}
-
-impl MemoryInfo {
-    pub fn new() -> Self {
-        MemoryInfo {
-            physmem: 0,
-            swaptotal: 0,
-        }
-    }
-
-    pub fn physmem(&self) -> u64 {
-        self.physmem
-    }
-
-    pub fn swaptotal(&self) -> u64 {
-        self.swaptotal
-    }
-}
-
-#[derive(Debug)]
-pub struct OsInfo {
-    name: String,
-    release: String,
-}
-
-impl OsInfo {
-    pub fn new() -> Self {
-        OsInfo {
-            name: String::new(),
-            release: String::new(),
-        }
-    }
-
-    pub fn name(&self) -> &str {
-        &self.name
-    }
-
-    pub fn release(&self) -> &str {
-        &self.release
-    }
-}
-
-pub fn collect_machine_info(
-    network_info: &mut NetworkInfo,
-    cpu_info: &mut CpuInfo,
-    memory_info: &mut MemoryInfo,
-    os_info: &mut OsInfo,
-) {
+pub fn collect_machine_info(device: &mut Device) {
     let mut sys = System::new_all();
     sys.refresh_all();
 
-    network_info.hostname = sys.host_name().expect(NOT_RETRIEVED);
+    device.net_host_name = sys.host_name().expect(NOT_RETRIEVED);
 
-    cpu_info.arch = NOT_IMPELMENTED.to_string();
-    cpu_info.model = sys.global_cpu_info().brand().to_string();
-    cpu_info.ncpus = sys.cpus().len();
+    device.cpu_arch = NOT_IMPELMENTED.to_string();
+    device.cpu_model = sys.global_cpu_info().brand().to_string();
+    device.cpu_ncpus = sys.cpus().len();
 
-    memory_info.physmem = sys.total_memory();
-    memory_info.swaptotal = sys.total_swap();
+    device.mem_phys_total = sys.total_memory();
+    device.mem_swap_total = sys.total_swap();
 
-    os_info.name = sys.name().expect(NOT_RETRIEVED);
-    os_info.release = sys.os_version().expect(NOT_RETRIEVED);
+    device.os_name = sys.name().expect(NOT_RETRIEVED);
+    device.os_release = sys.os_version().expect(NOT_RETRIEVED);
 }
