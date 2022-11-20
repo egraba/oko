@@ -1,5 +1,6 @@
 use sysinfo::{CpuExt, System, SystemExt};
 
+const NOT_IMPELMENTED: &str = "NOT_IMPLEMENTED";
 const NOT_RETRIEVED: &str = "NOT_RETRIEVED";
 
 #[derive(Debug)]
@@ -146,6 +147,7 @@ pub fn collect_machine_info(
 
     network_info.hostname = sys.host_name().expect(NOT_RETRIEVED);
 
+    cpu_info.arch = NOT_IMPELMENTED.to_string();
     cpu_info.model = sys.global_cpu_info().brand().to_string();
     cpu_info.ncpus = sys.cpus().len();
 
