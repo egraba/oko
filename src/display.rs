@@ -12,6 +12,7 @@ use std::time::{Duration, Instant};
 use tui::{
     backend::CrosstermBackend,
     layout::Rect,
+    style::{Modifier, Style},
     text::{Span, Spans},
     widgets::{Block, Borders, Paragraph},
     Terminal,
@@ -101,8 +102,14 @@ pub fn launch_display_mode(_interval: Duration) -> Result<(), io::Error> {
                 device.os_release(),
             ))]),
         ];
-        let machine =
-            Paragraph::new(machine).block(Block::default().title("Machine").borders(Borders::ALL));
+        let machine = Paragraph::new(machine).block(
+            Block::default()
+                .title(Span::styled(
+                    "Machine",
+                    Style::default().add_modifier(Modifier::BOLD),
+                ))
+                .borders(Borders::ALL),
+        );
         let machine_size = Rect {
             x: 0,
             y: 1,
