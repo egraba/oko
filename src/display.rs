@@ -1,12 +1,14 @@
 use crate::oko::collect_machine_info;
 use crate::oko::{CpuInfo, HardwareInfo, MemoryInfo, NetworkInfo, OsInfo};
+use crossterm::event::{self, Event as CEvent, KeyCode};
 use crossterm::execute;
 use crossterm::terminal::{
     disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen,
 };
 use std::io;
+use std::sync::mpsc::channel;
 use std::thread;
-use std::time;
+use std::time::{Duration, Instant};
 use tui::{
     backend::CrosstermBackend,
     layout::Rect,
@@ -15,8 +17,37 @@ use tui::{
     Terminal,
 };
 
-pub fn launch_display_mode(_interval: time::Duration) -> Result<(), io::Error> {
+enum Event<I> {
+    Input(I),
+    Tick,
+}
+
+pub fn launch_display_mode(_interval: Duration) -> Result<(), io::Error> {
     enable_raw_mode()?;
+
+    let (sender, receiver) = channel();
+    let tick_rate = Duration::from_millis(200);
+    thread::spawn(move || {
+        let mut last_tick = Instant::now();
+        loop {
+            let timeout = tick_rate
+                .checked_sub(last_tick.elapsed())
+                .unwrap_or_else(|| Duration::from_secs(0));
+
+            if event::poll(timeout).expect("Poll works") {
+                if let CEvent::Key(key) = event::read().expect("Events are read") {
+                    sender.send(Event::Input(key)).expect("Events are sent");
+                }
+            }
+
+            if last_tick.elapsed() >= tick_rate {
+                if let Ok(_) = sender.send(Event::Tick) {
+                    last_tick = Instant::now();
+                }
+            }
+        }
+    });
+
     let mut stdout = io::stdout();
     execute!(stdout, EnterAlternateScreen)?;
     let backend = CrosstermBackend::new(stdout);
@@ -85,7 +116,17 @@ pub fn launch_display_mode(_interval: time::Duration) -> Result<(), io::Error> {
         f.render_widget(machine, machine_size);
     })?;
 
-    thread::sleep(time::Duration::from_secs(5));
+    loop {
+        match receiver.recv().expect("Receive works") {
+            Event::Input(event) => match event.code {
+                KeyCode::Char('q') => {
+                    break;
+                }
+                _ => {}
+            },
+            Event::Tick => {}
+        }
+    }
 
     disable_raw_mode()?;
     execute!(terminal.backend_mut(), LeaveAlternateScreen)?;
