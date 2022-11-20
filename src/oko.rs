@@ -96,7 +96,13 @@ pub fn collect_machine_info(device: &mut Device) {
     let mut sys = System::new_all();
     sys.refresh_all();
 
+    device.hw_serial_number = NOT_IMPELMENTED.to_string();
+    device.hw_type = NOT_IMPELMENTED.to_string();
+    device.hw_model = NOT_IMPELMENTED.to_string();
+
     device.net_host_name = sys.host_name().expect(NOT_RETRIEVED);
+    device.net_ipv4 = NOT_IMPELMENTED.to_string();
+    device.net_mac = NOT_IMPELMENTED.to_string();
 
     device.cpu_arch = NOT_IMPELMENTED.to_string();
     device.cpu_model = sys.global_cpu_info().brand().to_string();
