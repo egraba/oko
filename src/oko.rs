@@ -146,7 +146,7 @@ pub fn collect_machine_info(
 
     network_info.hostname = sys.host_name().expect(NOT_RETRIEVED);
 
-    cpu_info.model = sys.cpus()[0].name().to_string();
+    cpu_info.model = sys.global_cpu_info().brand().to_string();
     cpu_info.ncpus = sys.cpus().len();
 
     memory_info.physmem = sys.total_memory();
