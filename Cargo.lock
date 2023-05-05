@@ -265,7 +265,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "oko-client"
+name = "oko"
 version = "0.1.0"
 dependencies = [
  "clap",
